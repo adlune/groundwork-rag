@@ -2,8 +2,18 @@ from groundwork.ingest.loaders import (
     _repeated_lines,
     clean_pdf_text,
     load_markdown,
+    looks_like_noise,
     looks_like_references,
 )
+
+
+def test_tables_and_garbled_text_are_noise_but_formulas_with_prose_are_not():
+    table = "RoBlarge (FT)* 355.0M 90.2 96.4 90.9 68.0 94.7 92.2 86.6 92.4 88.9 MNLI SST-2 0.8M 87.7±1.7"
+    garbled = "Supporters ˯뾽˯뾽˯뾽 qīďþÐÆĴĮķĨĨďīĴÐīĮăÐĊÌĴìÐ"
+    formula = "∂C ∂zi = 1 T (qi − pi) (2) If the temperature is high compared with the magnitude of the logits"
+    assert looks_like_noise(table)
+    assert looks_like_noise(garbled)
+    assert not looks_like_noise(formula)
 from groundwork.sources import Source
 
 

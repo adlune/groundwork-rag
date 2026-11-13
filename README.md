@@ -44,12 +44,15 @@ To use Claude instead, copy **.env.example** to **.env**, set `LLM_PROVIDER=anth
 The documents the app answers questions about are listed in **data/sources.yaml**: six papers and reports (PDF) plus the research notes in this repo (Markdown). The PDFs aren't stored in the repo, so download them first:
 
 ```bash
-uv run python scripts/download_corpus.py      # PDFs into data/raw/
-uv run python scripts/inspect_chunks.py --show 3   # chunk statistics and samples
-uv run pytest                                 # tests
+uv run python scripts/download_corpus.py           # PDFs into data/raw/
+uv run python scripts/ingest.py                    # chunk, embed and store in data/chroma/
+uv run python scripts/search.py "How does LoRA work?"   # semantic search, no LLM
+uv run pytest                                      # tests
 ```
 
-Commands for building the index and running the app will be added as they are built.
+Running **ingest.py** again only embeds what changed. `scripts/inspect_chunks.py --show 3` prints chunk statistics and samples without embedding anything.
+
+Commands for running the app will be added as they are built.
 
 ## About
 

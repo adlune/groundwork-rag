@@ -35,6 +35,17 @@ class Chunk:
     n_tokens: int
 
     @property
+    def embedding_text(self) -> str:
+        """What actually gets embedded: the chunk plus a short header saying where it is from.
+
+        A chunk like "It reduces the number of trainable parameters by 10,000 times" says
+        nothing about *what* "it" is. Prefixing the document title (and section) puts that
+        context into the vector. The header is only embedded, never shown or cited.
+        """
+        header = self.title if not self.section else f"{self.title} > {self.section}"
+        return f"{header}\n\n{self.text}"
+
+    @property
     def location(self) -> str:
         """Human-readable place in the document, e.g. 'p. 4' or 'Security lens'."""
         if self.page is not None:

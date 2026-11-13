@@ -110,6 +110,26 @@ def looks_like_references(text: str, min_citations: int = 2) -> bool:
     return len(CITATION.findall(text)) >= min_citations
 
 
+WORD = re.compile(r"^[A-Za-z][A-Za-z'-]*[A-Za-z]$")
+
+
+def word_ratio(text: str) -> float:
+    """Share of whitespace-separated tokens that are ordinary words."""
+    tokens = text.split()
+    words = sum(1 for t in tokens if WORD.match(t.strip(".,;:()[]\"“”‘’!?*")))
+    return words / max(len(tokens), 1)
+
+
+def looks_like_noise(text: str, min_word_ratio: float = 0.4) -> bool:
+    """True for result tables flattened into numbers and text from broken font encodings.
+
+    Such chunks carry no meaning, so their vectors sit in a "neutral" region of the
+    embedding space where unrelated questions also land. Prose is ~90% words; a chunk
+    under 40% is almost all numbers or garbage. Formula-heavy prose scores ~45% and stays.
+    """
+    return word_ratio(text) < min_word_ratio
+
+
 def load_pdf(src: Source) -> list[Section]:
     reader = PdfReader(src.file)
     raw_pages = [unicodedata.normalize("NFKC", p.extract_text() or "") for p in reader.pages]
