@@ -25,7 +25,9 @@ The **docs/research/** folder covers six ways of giving a model new knowledge. E
 5. [Conversational memory](docs/research/05-memory.md)
 6. [Knowledge distillation](docs/research/06-distillation.md)
 
-The [comparison table](docs/research/comparison.md) puts them side by side and explains when to use each.
+The [comparison table](docs/research/comparison.md) puts them side by side and explains when to use each, and the [conclusions](docs/conclusions.md) answer when to choose RAG over fine-tuning, how embeddings and semantic search work, and which technique fits information that changes daily.
+
+[docs/architecture.md](docs/architecture.md) explains how the app is built and what happens to a question, step by step.
 
 ## Usage
 

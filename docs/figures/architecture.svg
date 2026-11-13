@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" role="img" aria-labelledby="title desc">
+<title id="title">groundwork-rag architecture</title>
+<desc id="desc">Three programs work together. The browser sends a question to the Python server. The server searches the chunks by meaning (ChromaDB vectors) and by keywords (BM25 index), fuses the two rankings, and a gate decides whether any chunk is relevant enough. If not, it refuses without calling the model. If so, it builds a prompt with numbered sources and sends it to Ollama, which runs qwen3.5:4b on the local GPU. The answer's citations are mapped back to documents and pages and sent to the browser with the retrieval details. The index is built ahead of time by the ingestion script.</desc>
+<style>
+:root{--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--line:#0b0b0b;--hair:#c3c2b7;--grid:#e1e0d9;--gray:#ecebe7;--bar:#b9b8b2;--accent:#2a78d6;--accent-wash:#e3eefb}
+@media (prefers-color-scheme:dark){:root{--surface:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--muted:#898781;--line:#d6d5d0;--hair:#4a4a45;--grid:#2c2c2a;--gray:#2a2a28;--bar:#5c5b57;--accent:#3987e5;--accent-wash:#17293f}}
+text{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;fill:var(--ink)}
+.bg{fill:var(--surface)}
+.box{fill:var(--surface);stroke:var(--line);stroke-width:1.2}
+.panel{fill:var(--gray)}
+.gray{fill:var(--gray);stroke:var(--line);stroke-width:1.2}
+.accent{fill:var(--accent-wash);stroke:var(--accent);stroke-width:1.5}
+.rim{fill:none;stroke:var(--accent);stroke-width:1.5}
+.dash{fill:var(--surface);stroke:var(--line);stroke-width:1.2;stroke-dasharray:5 4}
+.arrow{stroke:var(--ink2);stroke-width:1.6;fill:none}
+.head{fill:var(--ink2)}
+.h{font-size:15px;font-weight:600}
+.lane{font-size:13px;font-weight:600;fill:var(--ink2)}
+.b{font-size:13px;font-weight:600}
+.s{font-size:12px;fill:var(--ink2)}
+.m{font-size:11px;fill:var(--muted)}
+</style>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<rect class="bg" width="960" height="560" rx="12"/>
+
+<text class="h" x="24" y="32">How the app is put together</text>
+<text class="s" x="24" y="52">Three programs on one computer. Blue marks where the knowledge lives.</text>
+
+<!-- Panels -->
+<rect class="panel" x="20" y="70" width="170" height="400" rx="10"/>
+<text class="lane" x="36" y="94">Browser</text>
+<rect class="panel" x="210" y="70" width="530" height="400" rx="10"/>
+<text class="lane" x="226" y="94">Python server (FastAPI)</text>
+<rect class="panel" x="760" y="70" width="180" height="400" rx="10"/>
+<text class="lane" x="776" y="94">Ollama</text>
+
+<!-- Knowledge stores -->
+<path class="accent" d="M230,118 a75,8 0 0 1 150,0 v44 a75,8 0 0 1 -150,0 z"/>
+<path class="rim" d="M230,118 a75,8 0 0 0 150,0"/>
+<text class="b" x="305" y="145" text-anchor="middle">ChromaDB</text>
+<text class="s" x="305" y="162" text-anchor="middle">402 chunks + vectors</text>
+
+<rect class="accent" x="400" y="110" width="150" height="58" rx="8"/>
+<text class="b" x="475" y="134" text-anchor="middle">Keyword index</text>
+<text class="s" x="475" y="152" text-anchor="middle">BM25, same chunks</text>
+
+<!-- Row A: question path -->
+<rect class="box" x="35" y="220" width="140" height="56" rx="8"/>
+<text class="b" x="105" y="244" text-anchor="middle">Question</text>
+<text class="s" x="105" y="262" text-anchor="middle">typed by the user</text>
+
+<rect class="box" x="230" y="220" width="150" height="56" rx="8"/>
+<text class="b" x="305" y="244" text-anchor="middle">Search</text>
+<text class="s" x="305" y="262" text-anchor="middle">meaning + keywords</text>
+
+<rect class="box" x="400" y="220" width="150" height="56" rx="8"/>
+<text class="b" x="475" y="244" text-anchor="middle">Gate</text>
+<text class="s" x="475" y="262" text-anchor="middle">relevant enough?</text>
+
+<rect class="box" x="570" y="220" width="150" height="56" rx="8"/>
+<text class="b" x="645" y="244" text-anchor="middle">Build prompt</text>
+<text class="s" x="645" y="262" text-anchor="middle">numbered sources</text>
+
+<rect class="gray" x="775" y="220" width="150" height="56" rx="8"/>
+<text class="b" x="850" y="244" text-anchor="middle">qwen3.5:4b</text>
+<text class="s" x="850" y="262" text-anchor="middle">language model, GPU</text>
+
+<!-- Row B: answer path -->
+<rect class="box" x="35" y="360" width="140" height="56" rx="8"/>
+<text class="b" x="105" y="384" text-anchor="middle">Answer</text>
+<text class="s" x="105" y="402" text-anchor="middle">citations + inspector</text>
+
+<rect class="dash" x="400" y="340" width="150" height="56" rx="8"/>
+<text class="b" x="475" y="364" text-anchor="middle">Refuse</text>
+<text class="s" x="475" y="382" text-anchor="middle">model not called</text>
+
+<rect class="box" x="570" y="340" width="150" height="56" rx="8"/>
+<text class="b" x="645" y="364" text-anchor="middle">Map citations</text>
+<text class="s" x="645" y="382" text-anchor="middle">[n] → document, page</text>
+
+<!-- Arrows: stores feed search -->
+<line class="arrow" x1="305" y1="172" x2="305" y2="216" marker-end="url(#ah)"/>
+<path class="arrow" d="M475,170 V194 H345 V216" marker-end="url(#ah)"/>
+
+<!-- Arrows: question path -->
+<line class="arrow" x1="177" y1="248" x2="226" y2="248" marker-end="url(#ah)"/>
+<line class="arrow" x1="382" y1="248" x2="396" y2="248" marker-end="url(#ah)"/>
+<line class="arrow" x1="552" y1="248" x2="566" y2="248" marker-end="url(#ah)"/>
+<text class="m" x="559" y="238" text-anchor="middle">yes</text>
+<line class="arrow" x1="722" y1="248" x2="771" y2="248" marker-end="url(#ah)"/>
+<line class="arrow" x1="475" y1="278" x2="475" y2="336" marker-end="url(#ah)"/>
+<text class="m" x="482" y="312">no</text>
+
+<!-- Arrows: answer path -->
+<path class="arrow" d="M850,278 V368 H724" marker-end="url(#ah)"/>
+<path class="arrow" d="M645,398 V444 H105 V420" marker-end="url(#ah)"/>
+<line class="arrow" x1="475" y1="398" x2="475" y2="444"/>
+
+<!-- Offline ingestion -->
+<rect class="dash" x="20" y="488" width="920" height="52" rx="10"/>
+<text class="b" x="36" y="510">Built ahead of time</text>
+<text class="s" x="36" y="528">scripts/ingest.py: download the PDFs → clean the text → split into chunks of ~350 tokens → turn each chunk into a vector → store in ChromaDB</text>
+</svg>
