@@ -262,7 +262,7 @@ details summary {
 .retrieved { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
 .hit-head {
   display: grid;
-  grid-template-columns: 18px minmax(0, 1fr) auto auto;
+  grid-template-columns: 18px minmax(0, 1fr) auto;
   gap: 8px;
   align-items: baseline;
   font-size: 13px;
@@ -287,10 +287,19 @@ details summary {
   border-radius: 4px;
 }
 
+.signal {
+  display: grid;
+  grid-template-columns: 62px minmax(0, 1fr) 44px;
+  gap: 8px;
+  align-items: center;
+  margin: 5px 0 0 26px;
+  font-size: 12px;
+}
+.signal-label { color: var(--ink2); }
+.signal .score { text-align: right; }
 .bar {
   position: relative;
   height: 8px;
-  margin: 6px 0 0 26px;
   background: var(--panel);
   border-radius: 4px;
 }

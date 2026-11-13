@@ -42,10 +42,13 @@ def main() -> int:
             c = s.hit.chunk
             print(f"  [{s.number}] {c.title}, {c.location}  (score {s.hit.score:.3f})")
 
-    print(f"\nRetrieved (threshold {result.min_similarity:.2f}):")
+    print(
+        f"\nRetrieved (used if meaning >= {result.min_similarity} or keywords >= {result.min_keyword}):"
+    )
     for hit in result.retrieved:
-        mark = "used" if hit in result.context else "below threshold"
-        print(f"  {hit.score:.3f}  {hit.chunk.source_id:24} {hit.chunk.location:22} {mark}")
+        mark = "used" if hit in result.context else "below thresholds"
+        kw = f"{hit.keyword:.2f}" if hit.keyword is not None else "  - "
+        print(f"  meaning {hit.score:.3f}  keywords {kw}  {hit.chunk.source_id:24} {hit.chunk.location:22} {mark}")
 
     t = result.timings
     gen = f", generation {t['generation_ms'] / 1000:.1f}s" if "generation_ms" in t else ""

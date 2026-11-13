@@ -55,5 +55,18 @@ def test_store_refuses_vectors_from_a_different_model(tmp_path):
         VectorStore(tmp_path / "chroma", "test", "some-other-model")
 
 
+def test_hybrid_search_adds_keyword_scores_and_dense_scores_for_every_hit(embedder, store):
+    from groundwork.keyword import KeywordIndex
+
+    ingest(CHUNKS, embedder, store)
+    retriever = Retriever(embedder, store, KeywordIndex(store.texts()), candidates=1)
+    hits = retriever.search("distillation teacher", k=3)
+    assert hits[0].chunk.source_id == "kd"
+    assert hits[0].keyword > 0.9
+    # With candidates=1, each search contributes one chunk; any chunk found by only one
+    # of them must still come back with its real dense score.
+    assert all(isinstance(h.score, float) for h in hits)
+
+
 def test_search_on_empty_store_returns_nothing(embedder, store):
     assert Retriever(embedder, store).search("anything", k=5) == []

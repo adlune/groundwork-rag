@@ -33,10 +33,16 @@ class Settings(BaseSettings):
     chunk_size: int = 350  # measured in embedding-model tokens
     chunk_overlap: int = 60
     top_k: int = 5
-    # Below this cosine similarity, the best chunk is "not relevant enough" and the
-    # app refuses instead of guessing. First estimate from exploring real scores
-    # (in-scope questions ~0.69-0.77, out-of-scope <= 0.53); calibrated in Phase 6.
-    min_similarity: float = 0.60
+    # The gate: a chunk is relevant enough to answer from if its cosine similarity
+    # reaches min_similarity OR its keyword match reaches min_keyword. Both values
+    # were calibrated on eval/questions.yaml with scripts/evaluate.py (docs/evaluation.md).
+    min_similarity: float = 0.645
+    # Hybrid search: also rank chunks by keyword match (BM25), and let a strong keyword
+    # match pass the gate when the dense score is low (short questions like "What is QLoRA?").
+    hybrid: bool = True
+    min_keyword: float = 0.70
+    candidates: int = 20  # how many results each search contributes before fusion
+    rrf_k: int = 60  # standard Reciprocal Rank Fusion constant
 
     # --- Corpus ---
     sources_file: Path = PROJECT_ROOT / "data" / "sources.yaml"

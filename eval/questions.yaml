@@ -1,0 +1,245 @@
+# Evaluation questions for scripts/evaluate.py
+#
+# type:
+#   answerable    the documents contain the answer; retrieval should find it
+#   out_of_scope  nothing in the documents is related; the app should refuse
+#   unanswerable  on topic, but the documents don't contain the answer; the model
+#                 should say it doesn't know instead of inventing one
+#
+# style (answerable only): direct, paraphrase (few words in common with the text) or
+# short (mostly one rare term or acronym).
+#
+# evidence: a retrieved chunk counts as relevant if it contains one of these phrases
+# (whole words, case-insensitive). sources, when given, also restricts which documents
+# count, for phrases that appear elsewhere with another meaning.
+
+questions:
+  # --- answerable, direct -------------------------------------------------------
+  - id: lora-params
+    type: answerable
+    style: direct
+    question: How does LoRA reduce the number of trainable parameters?
+    evidence: [low-rank, rank decomposition]
+
+  - id: dark-knowledge
+    type: answerable
+    style: direct
+    question: What is dark knowledge in distillation?
+    evidence: [dark knowledge]
+
+  - id: kd-temperature
+    type: answerable
+    style: direct
+    question: What does the temperature do in knowledge distillation?
+    evidence: [temperature]
+    sources: [hinton2015-distillation, research-distillation]
+
+  - id: memgpt-context
+    type: answerable
+    style: direct
+    question: How does MemGPT manage its limited context window?
+    evidence: [virtual context, main context, paging]
+
+  - id: dapt
+    type: answerable
+    style: direct
+    question: What is domain-adaptive pretraining?
+    evidence: [domain-adaptive, DAPT]
+
+  - id: tapt
+    type: answerable
+    style: direct
+    question: What is task-adaptive pretraining and how does it differ from DAPT?
+    evidence: [TAPT, task-adaptive]
+
+  - id: indirect-injection
+    type: answerable
+    style: direct
+    question: What is indirect prompt injection?
+    evidence: [indirect prompt injection, indirect injection]
+
+  - id: owasp-llm08
+    type: answerable
+    style: direct
+    question: What is LLM08 in the OWASP Top 10 for LLM applications?
+    evidence: [Vector and Embedding Weaknesses]
+
+  - id: rag-variants
+    type: answerable
+    style: direct
+    question: What are the two RAG formulations proposed by Lewis et al.?
+    evidence: [RAG-Sequence, RAG-Token]
+
+  - id: catastrophic-forgetting
+    type: answerable
+    style: direct
+    question: What is catastrophic forgetting when continuing to train a model?
+    evidence: [catastrophic forgetting]
+
+  - id: memory-layers
+    type: answerable
+    style: direct
+    question: What is the difference between short-term and long-term memory in LLM assistants?
+    evidence: [short-term, long-term memory]
+
+  - id: distilbert
+    type: answerable
+    style: direct
+    question: How much smaller and faster is DistilBERT compared to BERT?
+    evidence: [DistilBERT]
+
+  - id: lost-in-middle
+    type: answerable
+    style: direct
+    question: What is the lost in the middle problem with long prompts?
+    evidence: [lost in the middle]
+
+  - id: owasp-injection-mitigation
+    type: answerable
+    style: direct
+    question: What does OWASP recommend to mitigate prompt injection?
+    evidence: [Constrain model behavior, least privilege]
+    sources: [owasp2025-llm-top10]
+
+  # --- answerable, paraphrase ---------------------------------------------------
+  - id: remember-last-week
+    type: answerable
+    style: paraphrase
+    question: How can an assistant remember what I told it last week?
+    evidence: [long-term memory, previous conversations, stateless]
+
+  - id: plant-malicious-text
+    type: answerable
+    style: paraphrase
+    question: Can attackers plant malicious text in the documents a chatbot reads?
+    evidence: [poisoning, indirect prompt injection]
+
+  - id: search-vs-retrain
+    type: answerable
+    style: paraphrase
+    question: Why would a company pick searching its files over teaching the model again?
+    evidence: [Fresh knowledge, Facts that change, default answer]
+
+  - id: big-teaches-small
+    type: answerable
+    style: paraphrase
+    question: How can a big model teach a smaller one?
+    evidence: [student, teacher]
+    sources: [hinton2015-distillation, research-distillation, research-comparison]
+
+  - id: cheap-adaptation
+    type: answerable
+    style: paraphrase
+    question: Can I adapt a huge language model to my task using just one graphics card?
+    evidence: [single consumer GPU, 48 GB, 4-bit]
+
+  - id: copy-model-api
+    type: answerable
+    style: paraphrase
+    question: Can someone copy a model just by asking its API lots of questions?
+    evidence: [model extraction, Stealing]
+
+  - id: examples-change-weights
+    type: answerable
+    style: paraphrase
+    question: Do the weights change when I show the model a few examples in my message?
+    evidence: [in-context learning, frozen]
+    sources: [research-prompting]
+
+  - id: confident-wrong-answers
+    type: answerable
+    style: paraphrase
+    question: Why do language models sometimes state false things with confidence, and what helps?
+    evidence: [hallucination, Misinformation]
+
+  # --- answerable, short --------------------------------------------------------
+  - id: qlora
+    type: answerable
+    style: short
+    question: What is QLoRA?
+    evidence: [QLoRA]
+
+  - id: dpo
+    type: answerable
+    style: short
+    question: What is DPO?
+    evidence: [Direct Preference Optimization]
+
+  - id: poisonedrag
+    type: answerable
+    style: short
+    question: What is PoisonedRAG?
+    evidence: [PoisonedRAG]
+
+  - id: hnsw
+    type: answerable
+    style: short
+    question: What is HNSW?
+    evidence: [HNSW]
+
+  - id: bm25
+    type: answerable
+    style: short
+    question: What is BM25?
+    evidence: [BM25]
+
+  - id: letta
+    type: answerable
+    style: short
+    question: What is Letta?
+    evidence: [Letta]
+
+  # --- out of scope -------------------------------------------------------------
+  - id: oos-australia
+    type: out_of_scope
+    question: What is the capital of Australia?
+  - id: oos-cake
+    type: out_of_scope
+    question: Give me a recipe for chocolate cake.
+  - id: oos-worldcup
+    type: out_of_scope
+    question: Who won the 2018 football World Cup?
+  - id: oos-tire
+    type: out_of_scope
+    question: How do I change a flat tire?
+  - id: oos-boiling
+    type: out_of_scope
+    question: What is the boiling point of water in Fahrenheit?
+  - id: oos-novel
+    type: out_of_scope
+    question: Can you recommend a good science fiction novel?
+  - id: oos-weather
+    type: out_of_scope
+    question: What's the weather like in Bogotá today?
+  - id: oos-bitcoin
+    type: out_of_scope
+    question: What is the current price of Bitcoin?
+  - id: oos-chess
+    type: out_of_scope
+    question: How does castling work in chess?
+  - id: oos-python-install   # near the domain: "Python" appears in the corpus
+    type: out_of_scope
+    question: How do I install Python on Windows?
+  - id: oos-gaming-gpu       # near the domain: "GPU" appears in the corpus
+    type: out_of_scope
+    question: Which graphics card is best for gaming?
+  - id: oos-kubernetes       # near the domain: infrastructure, but not in the corpus
+    type: out_of_scope
+    question: What is Kubernetes used for?
+
+  # --- unanswerable (on topic, answer not in the documents) ---------------------
+  - id: un-bloomberg-gpus
+    type: unanswerable
+    question: What GPUs were used to train BloombergGPT?
+  - id: un-openai-cost
+    type: unanswerable
+    question: How much does it cost to fine-tune a model with the OpenAI API?
+  - id: un-gpt5-params
+    type: unanswerable
+    question: How many parameters does GPT-5 have?
+  - id: un-chatgpt-memory-db
+    type: unanswerable
+    question: Which vector database does ChatGPT's memory feature use internally?
+  - id: un-letta-founded
+    type: unanswerable
+    question: In what year was the company behind Letta founded?

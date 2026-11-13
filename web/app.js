@@ -7,14 +7,21 @@ const $ = (id) => document.getElementById(id);
 
 const EXAMPLES = [
   "How does LoRA reduce the number of trainable parameters?",
+  "What is QLoRA?",
   "What is dark knowledge in distillation?",
   "Can attackers plant malicious text in the documents a chatbot reads?",
-  "What is the capital of Australia?",
+  "Give me a recipe for chocolate cake.",
 ];
 
 const REFUSALS = {
-  low_similarity: (best, thr) =>
-    `No chunk reached the similarity threshold (best ${best} < ${thr}), so the model was not called.`,
+  low_similarity: (data) => {
+    const best = (key) => Math.max(0, ...data.retrieved.map((h) => h[key] ?? 0));
+    let text = `No chunk reached the meaning threshold (best ${fmt(best("score"))} < ${data.min_similarity.toFixed(3)})`;
+    if (data.retrieved.some((h) => h.keyword != null)) {
+      text += ` or the keyword threshold (best ${best("keyword").toFixed(2)} < ${data.min_keyword.toFixed(2)})`;
+    }
+    return `${text}, so the model was not called.`;
+  },
   no_answer_in_sources: () =>
     "The retrieved chunks were on topic, but the model found no answer in them.",
 };
@@ -116,20 +123,31 @@ function sourceCard(source) {
 
 // --- Retrieval inspector ---------------------------------------------------
 
-function hitRow(hit, threshold) {
-  const c = hit.chunk;
+function scoreBar(label, value, threshold, display) {
   const pct = (v) => `${Math.max(0, Math.min(1, v)) * 100}%`;
+  return el("div", { class: "signal" },
+    el("span", { class: "signal-label", text: label }),
+    el("div", { class: "bar", role: "img", "aria-label": `${label} ${display}, threshold ${threshold}` },
+      el("div", { class: "fill", style: `width:${pct(value)}` }),
+      el("div", { class: "thr", style: `left:${pct(threshold)}` }),
+    ),
+    el("span", { class: "score", text: display }),
+  );
+}
+
+function hitRow(hit, data) {
+  const c = hit.chunk;
+  const signals = [scoreBar("meaning", hit.score, data.min_similarity, fmt(hit.score))];
+  if (hit.keyword != null) {
+    signals.push(scoreBar("keywords", hit.keyword, data.min_keyword, hit.keyword.toFixed(2)));
+  }
   return el("li", { class: `hit ${hit.used ? "used" : "below"}` },
     el("div", { class: "hit-head" },
       el("span", { class: "rank", text: String(hit.rank) }),
       el("span", { class: "hit-src", title: c.title, text: c.title }),
       el("span", { class: "hit-loc", title: c.location, text: c.location }),
-      el("span", { class: "score", text: fmt(hit.score) }),
     ),
-    el("div", { class: "bar", role: "img", "aria-label": `similarity ${fmt(hit.score)}, ${hit.used ? "sent to the model" : "below threshold"}` },
-      el("div", { class: "fill", style: `width:${pct(hit.score)}` }),
-      el("div", { class: "thr", style: `left:${pct(threshold)}` }),
-    ),
+    ...signals,
     el("details", {},
       el("summary", { text: hit.used ? "Show chunk (sent to the model)" : "Show chunk (not used)" }),
       el("p", { class: "passage", text: c.text }),
@@ -140,8 +158,7 @@ function hitRow(hit, threshold) {
 function renderInspector(data) {
   $("inspector-empty").hidden = true;
   $("inspector").hidden = false;
-  $("thr-label").textContent = `threshold ${data.min_similarity.toFixed(2)}`;
-  $("retrieved").replaceChildren(...data.retrieved.map((h) => hitRow(h, data.min_similarity)));
+  $("retrieved").replaceChildren(...data.retrieved.map((h) => hitRow(h, data)));
 
   const t = data.timings;
   const rows = [
@@ -163,8 +180,7 @@ function render(data) {
   const refusal = $("refusal");
   refusal.hidden = !data.refused;
   if (data.refused) {
-    const best = data.retrieved.length ? fmt(data.retrieved[0].score) : "n/a";
-    refusal.textContent = REFUSALS[data.refusal_reason](best, data.min_similarity.toFixed(2));
+    refusal.textContent = REFUSALS[data.refusal_reason](data);
   }
   $("sources-title").hidden = data.sources.length === 0;
   $("sources").replaceChildren(...data.sources.map(sourceCard));

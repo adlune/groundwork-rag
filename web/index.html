@@ -41,14 +41,15 @@
     <aside class="inspector" aria-label="Retrieval inspector">
       <div class="card">
         <h2 class="section-title">Retrieval inspector</h2>
-        <p class="hint">What semantic search returned for the question, before the model saw anything.
-          Only chunks above the threshold are sent to the model.</p>
+        <p class="hint">What search returned for the question, before the model saw anything. Each chunk
+          is scored by meaning (embeddings) and by keywords (BM25). A chunk is sent to the model if
+          either score crosses its threshold.</p>
         <p id="inspector-empty" class="empty">Ask a question to see the retrieved chunks and their similarity scores.</p>
         <div id="inspector" hidden>
           <div class="legend">
             <span><i class="key key-used"></i>sent to the model</span>
             <span><i class="key key-below"></i>below threshold</span>
-            <span><i class="key key-thr"></i><span id="thr-label">threshold</span></span>
+            <span><i class="key key-thr"></i>threshold</span>
           </div>
           <ol id="retrieved" class="retrieved"></ol>
           <dl id="timings" class="timings"></dl>

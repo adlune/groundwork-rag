@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 500" role="img" aria-labelledby="title desc">
+<title id="title">Refusal gate on the evaluation questions</title>
+<desc id="desc">Each evaluation question plotted by its best meaning score and best keyword score. The gate accepts a question when meaning is at least 0.645 or keywords at least 0.7. Answerable questions fall in the accepted area; short acronym questions are rescued by the keyword score; off-topic questions fall outside, except one whose words appear in the documents themselves.</desc>
+<style>
+:root{--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--line:#0b0b0b;--hair:#c3c2b7;--grid:#e1e0d9;--gray:#ecebe7;--bar:#b9b8b2;--accent:#2a78d6;--accent-wash:#e3eefb}
+@media (prefers-color-scheme:dark){:root{--surface:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--muted:#898781;--line:#d6d5d0;--hair:#4a4a45;--grid:#2c2c2a;--gray:#2a2a28;--bar:#5c5b57;--accent:#3987e5;--accent-wash:#17293f}}
+text{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;fill:var(--ink)}
+.bg{fill:var(--surface)}
+.zone{fill:var(--accent-wash)}
+.grid{stroke:var(--grid);stroke-width:1}
+.axis{stroke:var(--hair);stroke-width:1;fill:none}
+.thr{stroke:var(--line);stroke-width:1.5;stroke-dasharray:5 4}
+.ans{fill:var(--accent);stroke:var(--surface);stroke-width:1.5}
+.oos{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+.una{fill:var(--bar);stroke:var(--surface);stroke-width:1.5}
+.lead{stroke:var(--ink2);stroke-width:1}
+.h{font-size:15px;font-weight:600}
+.s{font-size:12px;fill:var(--ink2)}
+.m{font-size:11px;fill:var(--muted)}
+</style>
+<rect class="bg" width="860" height="500" rx="12"/>
+<text class="h" x="24" y="32">What the gate sees</text>
+<text class="s" x="24" y="52">Each dot is one evaluation question. Shaded: answered (meaning ≥ 0.645 or keywords ≥ 0.7).</text>
+<rect class="zone" x="368.9" y="110" width="311.1" height="320"/>
+<rect class="zone" x="70" y="110" width="298.9" height="96.0"/>
+<line class="grid" x1="192.0" y1="110" x2="192.0" y2="430"/>
+<text class="m" x="192.0" y="448" text-anchor="middle">0.5</text>
+<line class="grid" x1="314.0" y1="110" x2="314.0" y2="430"/>
+<text class="m" x="314.0" y="448" text-anchor="middle">0.6</text>
+<line class="grid" x1="436.0" y1="110" x2="436.0" y2="430"/>
+<text class="m" x="436.0" y="448" text-anchor="middle">0.7</text>
+<line class="grid" x1="558.0" y1="110" x2="558.0" y2="430"/>
+<text class="m" x="558.0" y="448" text-anchor="middle">0.8</text>
+<line class="grid" x1="680.0" y1="110" x2="680.0" y2="430"/>
+<text class="m" x="680.0" y="448" text-anchor="middle">0.9</text>
+<line class="grid" x1="70" y1="350.0" x2="680" y2="350.0"/>
+<text class="m" x="62" y="354.0" text-anchor="end">0.25</text>
+<line class="grid" x1="70" y1="270.0" x2="680" y2="270.0"/>
+<text class="m" x="62" y="274.0" text-anchor="end">0.50</text>
+<line class="grid" x1="70" y1="190.0" x2="680" y2="190.0"/>
+<text class="m" x="62" y="194.0" text-anchor="end">0.75</text>
+<line class="grid" x1="70" y1="110.0" x2="680" y2="110.0"/>
+<text class="m" x="62" y="114.0" text-anchor="end">1.00</text>
+<text class="m" x="62" y="434" text-anchor="end">0</text>
+<path class="axis" d="M70,110 V430 H680"/>
+<line class="thr" x1="368.9" y1="110" x2="368.9" y2="430"/>
+<line class="thr" x1="70" y1="206.0" x2="368.9" y2="206.0"/>
+<text class="s" x="375.0" y="470" text-anchor="middle">best meaning score (cosine similarity)</text>
+<text class="s" x="18" y="270.0" text-anchor="middle" transform="rotate(-90 18 270.0)">best keyword score (BM25)</text>
+<circle class="una" cx="447.0" cy="236.4" r="5.5"><title>What GPUs were used to train BloombergGPT?</title></circle>
+<circle class="una" cx="464.1" cy="188.7" r="5.5"><title>How much does it cost to fine-tune a model with the OpenAI API?</title></circle>
+<circle class="una" cx="372.6" cy="119.3" r="5.5"><title>How many parameters does GPT-5 have?</title></circle>
+<circle class="una" cx="543.4" cy="213.0" r="5.5"><title>Which vector database does ChatGPT's memory feature use internally?</title></circle>
+<circle class="una" cx="159.1" cy="307.8" r="5.5"><title>In what year was the company behind Letta founded?</title></circle>
+<circle class="oos" cx="162.7" cy="110.0" r="5.5"><title>What is the capital of Australia?</title></circle>
+<text class="s" x="158.7" y="132.0" text-anchor="start">“capital of Australia”</text>
+<circle class="oos" cx="199.3" cy="343.0" r="5.5"><title>Give me a recipe for chocolate cake.</title></circle>
+<circle class="oos" cx="218.8" cy="303.9" r="5.5"><title>Who won the 2018 football World Cup?</title></circle>
+<circle class="oos" cx="228.6" cy="302.6" r="5.5"><title>How do I change a flat tire?</title></circle>
+<circle class="oos" cx="305.5" cy="355.8" r="5.5"><title>What is the boiling point of water in Fahrenheit?</title></circle>
+<circle class="oos" cx="188.3" cy="333.7" r="5.5"><title>Can you recommend a good science fiction novel?</title></circle>
+<circle class="oos" cx="145.6" cy="302.6" r="5.5"><title>What's the weather like in Bogotá today?</title></circle>
+<circle class="oos" cx="264.0" cy="332.7" r="5.5"><title>What is the current price of Bitcoin?</title></circle>
+<circle class="oos" cx="257.9" cy="311.6" r="5.5"><title>How does castling work in chess?</title></circle>
+<circle class="oos" cx="294.5" cy="265.8" r="5.5"><title>How do I install Python on Windows?</title></circle>
+<circle class="oos" cx="220.1" cy="380.7" r="5.5"><title>Which graphics card is best for gaming?</title></circle>
+<circle class="oos" cx="334.7" cy="430.0" r="5.5"><title>What is Kubernetes used for?</title></circle>
+<text class="s" x="342.7" y="421.0" text-anchor="start">“Kubernetes”</text>
+<circle class="ans" cx="523.8" cy="110.0" r="5.5"><title>How does LoRA reduce the number of trainable parameters?</title></circle>
+<circle class="ans" cx="520.2" cy="110.0" r="5.5"><title>What is dark knowledge in distillation?</title></circle>
+<circle class="ans" cx="566.5" cy="110.0" r="5.5"><title>What does the temperature do in knowledge distillation?</title></circle>
+<circle class="ans" cx="605.6" cy="110.0" r="5.5"><title>How does MemGPT manage its limited context window?</title></circle>
+<circle class="ans" cx="612.9" cy="110.0" r="5.5"><title>What is domain-adaptive pretraining?</title></circle>
+<circle class="ans" cx="583.6" cy="110.0" r="5.5"><title>What is task-adaptive pretraining and how does it differ from DAPT?</title></circle>
+<circle class="ans" cx="523.8" cy="110.0" r="5.5"><title>What is indirect prompt injection?</title></circle>
+<circle class="ans" cx="547.0" cy="110.0" r="5.5"><title>What is LLM08 in the OWASP Top 10 for LLM applications?</title></circle>
+<circle class="ans" cx="427.5" cy="222.3" r="5.5"><title>What are the two RAG formulations proposed by Lewis et al.?</title></circle>
+<circle class="ans" cx="490.9" cy="196.1" r="5.5"><title>What is catastrophic forgetting when continuing to train a model?</title></circle>
+<circle class="ans" cx="514.1" cy="228.4" r="5.5"><title>What is the difference between short-term and long-term memory in LLM assistants?</title></circle>
+<circle class="ans" cx="639.7" cy="110.0" r="5.5"><title>How much smaller and faster is DistilBERT compared to BERT?</title></circle>
+<circle class="ans" cx="487.2" cy="127.0" r="5.5"><title>What is the lost in the middle problem with long prompts?</title></circle>
+<circle class="ans" cx="540.9" cy="171.8" r="5.5"><title>What does OWASP recommend to mitigate prompt injection?</title></circle>
+<circle class="ans" cx="427.5" cy="244.4" r="5.5"><title>How can an assistant remember what I told it last week?</title></circle>
+<circle class="ans" cx="500.7" cy="256.6" r="5.5"><title>Can attackers plant malicious text in the documents a chatbot reads?</title></circle>
+<circle class="ans" cx="433.6" cy="312.9" r="5.5"><title>Why would a company pick searching its files over teaching the model again?</title></circle>
+<circle class="ans" cx="445.8" cy="188.1" r="5.5"><title>How can a big model teach a smaller one?</title></circle>
+<circle class="ans" cx="442.1" cy="317.7" r="5.5"><title>Can I adapt a huge language model to my task using just one graphics card?</title></circle>
+<circle class="ans" cx="399.4" cy="351.9" r="5.5"><title>Can someone copy a model just by asking its API lots of questions?</title></circle>
+<text class="s" x="407.4" y="367.9" text-anchor="start">“copy a model via its API”</text>
+<circle class="ans" cx="490.9" cy="147.4" r="5.5"><title>Do the weights change when I show the model a few examples in my message?</title></circle>
+<circle class="ans" cx="468.9" cy="346.5" r="5.5"><title>Why do language models sometimes state false things with confidence, and what helps?</title></circle>
+<circle class="ans" cx="218.8" cy="110.0" r="5.5"><title>What is QLoRA?</title></circle>
+<circle class="ans" cx="245.7" cy="146.8" r="5.5"><title>What is DPO?</title></circle>
+<circle class="ans" cx="277.4" cy="110.0" r="5.5"><title>What is PoisonedRAG?</title></circle>
+<circle class="ans" cx="212.7" cy="112.6" r="5.5"><title>What is HNSW?</title></circle>
+<circle class="ans" cx="244.5" cy="110.0" r="5.5"><title>What is BM25?</title></circle>
+<circle class="ans" cx="261.5" cy="110.0" r="5.5"><title>What is Letta?</title></circle>
+<path class="lead" fill="none" d="M212.7,102.0 V96.0 H277.4 V102.0"/>
+<text class="s" x="245.1" y="90.0" text-anchor="middle">short questions: “What is QLoRA?”, “What is HNSW?”…</text>
+<circle class="ans" cx="706" cy="120" r="5.5"/><text class="s" x="718" y="124">answerable</text>
+<circle class="una" cx="706" cy="140" r="5.5"/><text class="s" x="718" y="144">on topic, not answerable</text>
+<circle class="oos" cx="706" cy="160" r="5.5"/><text class="s" x="718" y="164">off-topic</text>
+</svg>

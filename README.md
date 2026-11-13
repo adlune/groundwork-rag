@@ -10,6 +10,8 @@ A language model only knows what it saw during training. RAG gives it access to 
 
 If nothing in the documents is relevant enough, the app says it doesn't have the information instead of guessing.
 
+Search is hybrid: passages are ranked both by meaning (embeddings) and by exact words (BM25 keyword search), which keeps short questions like "What is QLoRA?" from being missed.
+
 The pipeline is written without RAG frameworks, so every step (chunking, embedding, search, prompt building) is visible in the code.
 
 ## Research
@@ -59,9 +61,18 @@ To start the web app:
 uv run uvicorn groundwork.api:app --port 8000
 ```
 
-Then open http://localhost:8000. Next to each answer, a retrieval inspector shows the chunks semantic search found, their similarity scores, the threshold, and which chunks were sent to the model. The API is documented at http://localhost:8000/docs.
+Then open http://localhost:8000. Next to each answer, a retrieval inspector shows the chunks search found, their meaning and keyword scores, the thresholds, and which chunks were sent to the model. The API is documented at http://localhost:8000/docs.
 
-The app refuses in two ways. If no chunk is similar enough to the question (`MIN_SIMILARITY` in **.env**), it answers right away that it doesn't have the information, without calling the model. If the chunks are on topic but don't contain the answer, the model is instructed to say so instead of guessing.
+The app refuses in two ways. If no chunk reaches either threshold (`MIN_SIMILARITY` or `MIN_KEYWORD` in **.env**), it answers right away that it doesn't have the information, without calling the model. If the chunks are on topic but don't contain the answer, the model is instructed to say so instead of guessing.
+
+## Evaluation
+
+The app was tested on 45 questions: answerable ones, off-topic ones, and on-topic ones the documents can't answer. Hybrid search finds a relevant passage in the top 5 for 79% of the answerable questions (100% of the short ones), the gate wrongly refuses none of them, and the model never made up an answer in the end-to-end run. Details, the failures and the limitations are in [docs/evaluation.md](docs/evaluation.md).
+
+```bash
+uv run python scripts/evaluate.py              # retrieval and refusal gate
+uv run python scripts/evaluate.py --generate   # also run every question through the model
+```
 
 ## About
 

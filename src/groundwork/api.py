@@ -42,8 +42,9 @@ class ChunkOut(BaseModel):
 
 class RetrievedOut(BaseModel):
     rank: int
-    score: float
-    used: bool  # passed the threshold and was sent to the model
+    score: float  # cosine similarity (meaning)
+    keyword: float | None  # BM25 match strength 0-1, None when hybrid search is off
+    used: bool  # passed the gate and was sent to the model
     chunk: ChunkOut
 
 
@@ -61,6 +62,7 @@ class AskResponse(BaseModel):
     sources: list[SourceOut]
     retrieved: list[RetrievedOut]
     min_similarity: float
+    min_keyword: float
     model: str | None
     timings: dict[str, float]
 
@@ -97,7 +99,9 @@ def create_app(pipeline: RagPipeline | None = None) -> FastAPI:
             "llm_problem": problem,
             "chunks": p.retriever.store.count(),
             "top_k": p.top_k,
+            "hybrid": p.retriever.hybrid,
             "min_similarity": p.min_similarity,
+            "min_keyword": p.min_keyword,
         }
 
     @app.get("/api/documents")
@@ -121,10 +125,13 @@ def create_app(pipeline: RagPipeline | None = None) -> FastAPI:
             refusal_reason=r.refusal_reason,
             sources=[SourceOut(number=s.number, score=s.hit.score, chunk=_chunk_out(s.hit.chunk)) for s in r.sources],
             retrieved=[
-                RetrievedOut(rank=i, score=h.score, used=h in r.context, chunk=_chunk_out(h.chunk))
+                RetrievedOut(
+                    rank=i, score=h.score, keyword=h.keyword, used=h in r.context, chunk=_chunk_out(h.chunk)
+                )
                 for i, h in enumerate(r.retrieved, start=1)
             ],
             min_similarity=r.min_similarity,
+            min_keyword=r.min_keyword,
             model=r.model,
             timings=r.timings,
         )

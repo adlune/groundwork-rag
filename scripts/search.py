@@ -1,4 +1,4 @@
-"""Semantic search from the command line: no LLM, just the retrieval step.
+"""Search from the command line: no LLM, just the retrieval step (hybrid by default).
 
     uv run python scripts/search.py "How does LoRA reduce trainable parameters?"
     uv run python scripts/search.py "Can attackers poison a chatbot's documents?" -k 3
@@ -24,7 +24,8 @@ def main() -> None:
     for rank, hit in enumerate(hits, 1):
         c = hit.chunk
         snippet = " ".join(c.text.split())[:220]
-        print(f"{rank}. score {hit.score:.3f} | {c.source_id} | {c.location}")
+        kw = f" | keywords {hit.keyword:.2f}" if hit.keyword is not None else ""
+        print(f"{rank}. meaning {hit.score:.3f}{kw} | {c.source_id} | {c.location}")
         print(f"   {snippet}...\n")
 
 

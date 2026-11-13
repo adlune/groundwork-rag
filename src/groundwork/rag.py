@@ -18,7 +18,7 @@ from dataclasses import dataclass, field
 from groundwork.config import Settings, get_settings
 from groundwork.llm import LLMProvider, get_llm
 from groundwork.prompts import NO_ANSWER, build_prompt
-from groundwork.retriever import Hit, Retriever, get_retriever
+from groundwork.retriever import Hit, Retriever, get_retriever, passes_gate
 
 _CITATION = re.compile(r"\[(\d+(?:\s*,\s*\d+)*)\]")  # [1], [2][3], [1, 2]
 
@@ -39,6 +39,7 @@ class RagAnswer:
     context: list[Hit]  # chunks sent to the LLM (passed the gate)
     retrieved: list[Hit]  # everything semantic search returned, with scores
     min_similarity: float
+    min_keyword: float
     model: str | None
     timings: dict[str, float] = field(default_factory=dict)  # milliseconds
 
@@ -60,11 +61,19 @@ def is_no_answer(text: str) -> bool:
 
 
 class RagPipeline:
-    def __init__(self, retriever: Retriever, llm: LLMProvider, top_k: int, min_similarity: float):
+    def __init__(
+        self,
+        retriever: Retriever,
+        llm: LLMProvider,
+        top_k: int,
+        min_similarity: float,
+        min_keyword: float = 0.8,
+    ):
         self.retriever = retriever
         self.llm = llm
         self.top_k = top_k
         self.min_similarity = min_similarity
+        self.min_keyword = min_keyword
 
     def warmup(self) -> None:
         """Load the embedding model now, so the first question's timings are real.
@@ -84,13 +93,14 @@ class RagPipeline:
         t1 = time.perf_counter()
         timings = {"retrieval_ms": (t1 - t0) * 1000}
 
-        # Only chunks above the threshold go to the model: low-scoring neighbours are
+        # Only chunks that pass the gate go to the model: low-scoring neighbours are
         # noise that can distract it.
-        context = [h for h in retrieved if h.score >= self.min_similarity]
+        context = [h for h in retrieved if passes_gate(h, self.min_similarity, self.min_keyword)]
         common = {
             "question": question,
             "retrieved": retrieved,
             "min_similarity": self.min_similarity,
+            "min_keyword": self.min_keyword,
             "timings": timings,
         }
 
@@ -126,4 +136,10 @@ class RagPipeline:
 
 def get_pipeline(settings: Settings | None = None) -> RagPipeline:
     settings = settings or get_settings()
-    return RagPipeline(get_retriever(settings), get_llm(settings), settings.top_k, settings.min_similarity)
+    return RagPipeline(
+        get_retriever(settings),
+        get_llm(settings),
+        settings.top_k,
+        settings.min_similarity,
+        settings.min_keyword,
+    )

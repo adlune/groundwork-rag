@@ -130,6 +130,32 @@ class VectorStore:
             )
         ]
 
+    def chunks(self) -> list[Chunk]:
+        """Every stored chunk."""
+        got = self.collection.get(include=["documents", "metadatas"])
+        return [_from_record(*rec) for rec in zip(got["ids"], got["documents"], got["metadatas"])]
+
+    def texts(self) -> dict[str, str]:
+        """Every stored chunk's text by id (used to build the keyword index)."""
+        got = self.collection.get(include=["documents"])
+        return dict(zip(got["ids"], got["documents"]))
+
+    def fetch(self, ids: list[str], vector: np.ndarray) -> list[tuple[Chunk, float]]:
+        """Specific chunks with their cosine similarity to `vector`.
+
+        Used for chunks that keyword search found but vector search didn't rank, so
+        every result still has a semantic score.
+        """
+        if not ids:
+            return []
+        got = self.collection.get(ids=ids, include=["documents", "metadatas", "embeddings"])
+        return [
+            (_from_record(cid, doc, meta), float(np.dot(np.asarray(emb), vector)))
+            for cid, doc, meta, emb in zip(
+                got["ids"], got["documents"], got["metadatas"], got["embeddings"]
+            )
+        ]
+
     def documents(self) -> list[dict]:
         """One row per source document: id, title, path and number of chunks."""
         rows: dict[str, dict] = {}

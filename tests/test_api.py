@@ -35,6 +35,7 @@ def test_ask_returns_answer_sources_and_retrieval_details(client_with):
     assert data["sources"][0]["chunk"]["location"] == "p. 4"
     assert [r["rank"] for r in data["retrieved"]] == [1, 2]
     assert data["retrieved"][0]["used"] is True
+    assert data["retrieved"][0]["keyword"] is None  # this test pipeline is dense-only
     assert "retrieval_ms" in data["timings"]
 
 
