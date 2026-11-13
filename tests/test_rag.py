@@ -4,25 +4,13 @@ from groundwork.ingest.pipeline import ingest
 from groundwork.prompts import NO_ANSWER, build_prompt
 from groundwork.rag import RagPipeline, parse_citations
 from groundwork.retriever import Hit, Retriever
-from tests.conftest import make_chunk
+from tests.conftest import FakeLLM, make_chunk
 
 CHUNKS = [
     make_chunk("LoRA freezes the pretrained weights and trains two small low rank matrices", "lora"),
     make_chunk("Distillation trains a small student model to imitate a large teacher model", "kd"),
     make_chunk("Retrieval augmented generation searches documents and cites them", "rag"),
 ]
-
-
-class FakeLLM:
-    name = "fake/llm"
-
-    def __init__(self, reply: str):
-        self.reply = reply
-        self.calls: list[tuple[str, str]] = []
-
-    def generate(self, system: str, prompt: str) -> str:
-        self.calls.append((system, prompt))
-        return self.reply
 
 
 @pytest.fixture

@@ -53,6 +53,14 @@ uv run pytest                                      # tests
 
 Running **ingest.py** again only embeds what changed. `scripts/inspect_chunks.py --show 3` prints chunk statistics and samples without embedding anything.
 
+To start the web app:
+
+```bash
+uv run uvicorn groundwork.api:app --port 8000
+```
+
+Then open http://localhost:8000. Next to each answer, a retrieval inspector shows the chunks semantic search found, their similarity scores, the threshold, and which chunks were sent to the model. The API is documented at http://localhost:8000/docs.
+
 The app refuses in two ways. If no chunk is similar enough to the question (`MIN_SIMILARITY` in **.env**), it answers right away that it doesn't have the information, without calling the model. If the chunks are on topic but don't contain the answer, the model is instructed to say so instead of guessing.
 
 ## About

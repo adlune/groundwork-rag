@@ -35,7 +35,13 @@ class SentenceTransformerEmbedder:
         if self._model is None:
             from sentence_transformers import SentenceTransformer
 
-            self._model = SentenceTransformer(self.name)
+            try:
+                # Use the copy already on disk without asking Hugging Face for updates:
+                # ~0.4 s instead of 20-40 s of network checks, and it works offline
+                # (handy for a live demo on unreliable Wi-Fi).
+                self._model = SentenceTransformer(self.name, local_files_only=True)
+            except OSError:  # not on disk yet: first run, download it
+                self._model = SentenceTransformer(self.name)
         return self._model
 
     def embed_documents(self, texts: list[str]) -> np.ndarray:

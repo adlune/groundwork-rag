@@ -20,6 +20,17 @@ class OllamaProvider:
         self.num_ctx = num_ctx
         self.client = client or httpx.Client(timeout=timeout)
 
+    def check(self) -> str | None:
+        """None if Ollama is running and has the model, otherwise what's wrong."""
+        try:
+            resp = self.client.get(f"{self.base_url}/api/tags", timeout=3)
+            names = {m["name"] for m in resp.json().get("models", [])}
+        except (httpx.HTTPError, ValueError):
+            return f"Ollama is not reachable at {self.base_url}. Start it with: ollama serve"
+        if self.model not in names:
+            return f"Model {self.model} is not installed. Run: ollama pull {self.model}"
+        return None
+
     def generate(self, system: str, prompt: str) -> str:
         payload = {
             "model": self.model,

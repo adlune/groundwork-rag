@@ -32,6 +32,20 @@ class FakeEmbedder:
         return self._embed(text)
 
 
+class FakeLLM:
+    """Returns a fixed reply and records every prompt it was sent."""
+
+    name = "fake/llm"
+
+    def __init__(self, reply: str):
+        self.reply = reply
+        self.calls: list[tuple[str, str]] = []
+
+    def generate(self, system: str, prompt: str) -> str:
+        self.calls.append((system, prompt))
+        return self.reply
+
+
 def make_chunk(text: str, source_id: str = "doc", page: int | None = None, section: str | None = "S") -> Chunk:
     cid = hashlib.sha1(f"{source_id}|{page}|{section}|{text}".encode()).hexdigest()[:16]
     return Chunk(
