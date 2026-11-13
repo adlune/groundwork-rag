@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 336" role="img" aria-labelledby="title desc">
+<title id="title">Softmax temperature in distillation</title>
+<desc id="desc">A teacher's output for one picture of a dog, from the same logits at two temperatures. At T equals 1: dog 89%, wolf 8.9%, fox 1.6%, cat 0.4%, car 0.01%. At T equals 4: dog 44%, wolf 25%, fox 16%, cat 11%, car 4.4%. Softening reveals that a dog looks much more like a wolf than like a car.</desc>
+<style>
+:root{--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--line:#0b0b0b;--hair:#c3c2b7;--grid:#e1e0d9;--gray:#ecebe7;--bar:#b9b8b2;--accent:#2a78d6;--accent-wash:#e3eefb}
+@media (prefers-color-scheme:dark){:root{--surface:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--muted:#898781;--line:#d6d5d0;--hair:#4a4a45;--grid:#2c2c2a;--gray:#2a2a28;--bar:#5c5b57;--accent:#3987e5;--accent-wash:#17293f}}
+text{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;fill:var(--ink)}
+.bg{fill:var(--surface)}
+.box{fill:var(--surface);stroke:var(--line);stroke-width:1.2}
+.panel{fill:var(--gray)}
+.gray{fill:var(--gray);stroke:var(--line);stroke-width:1.2}
+.accent{fill:var(--accent-wash);stroke:var(--accent);stroke-width:1.5}
+.rim{fill:none;stroke:var(--accent);stroke-width:1.5}
+.solid{fill:var(--accent)}
+.bar{fill:var(--bar)}
+.dot{fill:var(--ink)}
+.grid{stroke:var(--grid);stroke-width:1}
+.axis{stroke:var(--hair);stroke-width:1;fill:none}
+.arrow{stroke:var(--ink2);stroke-width:1.6;fill:none}
+.head{fill:var(--ink2)}
+.lock{fill:none;stroke:var(--ink2);stroke-width:1.6}
+.lockbody{fill:var(--ink2)}
+.h{font-size:15px;font-weight:600}
+.lane{font-size:14px;font-weight:600}
+.lane-s{font-size:12px;font-weight:400;fill:var(--ink2)}
+.b{font-size:13px;font-weight:600}
+.t{font-size:13px}
+.s{font-size:12px;fill:var(--ink2)}
+.m{font-size:11px;fill:var(--muted)}
+.op{font-size:26px;fill:var(--ink2)}
+.big{font-size:30px;font-weight:600}
+.model{font-size:18px;font-weight:600}
+.mono{font-family:ui-monospace,"Cascadia Code",Consolas,monospace}
+</style>
+<rect class="bg" width="820" height="336" rx="12"/>
+
+<text class="b" x="20" y="28">Teacher's output for one picture of a dog</text>
+<text class="s" x="20" y="48">Same logits, two temperatures</text>
+
+<!-- Panel 1: T = 1. Baseline y=270, 180 px = 100% -->
+<text class="b" x="70" y="76">T = 1, normal softmax</text>
+<line class="grid" x1="70" y1="90" x2="390" y2="90"/>
+<line class="grid" x1="70" y1="135" x2="390" y2="135"/>
+<line class="grid" x1="70" y1="180" x2="390" y2="180"/>
+<line class="grid" x1="70" y1="225" x2="390" y2="225"/>
+<line class="axis" x1="70" y1="270" x2="390" y2="270"/>
+<text class="m" x="62" y="94" text-anchor="end">100%</text>
+<text class="m" x="62" y="139" text-anchor="end">75%</text>
+<text class="m" x="62" y="184" text-anchor="end">50%</text>
+<text class="m" x="62" y="229" text-anchor="end">25%</text>
+<text class="m" x="62" y="274" text-anchor="end">0%</text>
+
+<path class="bar" d="M85,270 V113.7 a4,4 0 0 1 4,-4 h26 a4,4 0 0 1 4,4 V270 z"/>
+<text class="s" x="102" y="103.7" text-anchor="middle">89%</text>
+<path class="bar" d="M149,270 V257.9 a4,4 0 0 1 4,-4 h26 a4,4 0 0 1 4,4 V270 z"/>
+<text class="s" x="166" y="247.9" text-anchor="middle">8.9%</text>
+<rect class="bar" x="213" y="267.1" width="34" height="2.9"/>
+<text class="s" x="230" y="261" text-anchor="middle">1.6%</text>
+<rect class="bar" x="277" y="269" width="34" height="1"/>
+<text class="s" x="294" y="261" text-anchor="middle">0.4%</text>
+<rect class="bar" x="341" y="269" width="34" height="1"/>
+<text class="s" x="358" y="261" text-anchor="middle">0.01%</text>
+
+<text class="t" x="102" y="290" text-anchor="middle">dog</text>
+<text class="t" x="166" y="290" text-anchor="middle">wolf</text>
+<text class="t" x="230" y="290" text-anchor="middle">fox</text>
+<text class="t" x="294" y="290" text-anchor="middle">cat</text>
+<text class="t" x="358" y="290" text-anchor="middle">car</text>
+
+<!-- Panel 2: T = 4 -->
+<text class="b" x="480" y="76">T = 4, softened</text>
+<line class="grid" x1="480" y1="90" x2="800" y2="90"/>
+<line class="grid" x1="480" y1="135" x2="800" y2="135"/>
+<line class="grid" x1="480" y1="180" x2="800" y2="180"/>
+<line class="grid" x1="480" y1="225" x2="800" y2="225"/>
+<line class="axis" x1="480" y1="270" x2="800" y2="270"/>
+<text class="m" x="472" y="94" text-anchor="end">100%</text>
+<text class="m" x="472" y="139" text-anchor="end">75%</text>
+<text class="m" x="472" y="184" text-anchor="end">50%</text>
+<text class="m" x="472" y="229" text-anchor="end">25%</text>
+<text class="m" x="472" y="274" text-anchor="end">0%</text>
+
+<path class="solid" d="M495,270 V195.4 a4,4 0 0 1 4,-4 h26 a4,4 0 0 1 4,4 V270 z"/>
+<text class="s" x="512" y="185.4" text-anchor="middle">44%</text>
+<path class="solid" d="M559,270 V229.8 a4,4 0 0 1 4,-4 h26 a4,4 0 0 1 4,4 V270 z"/>
+<text class="s" x="576" y="219.8" text-anchor="middle">25%</text>
+<path class="solid" d="M623,270 V245.1 a4,4 0 0 1 4,-4 h26 a4,4 0 0 1 4,4 V270 z"/>
+<text class="s" x="640" y="235.1" text-anchor="middle">16%</text>
+<path class="solid" d="M687,270 V253.6 a4,4 0 0 1 4,-4 h26 a4,4 0 0 1 4,4 V270 z"/>
+<text class="s" x="704" y="243.6" text-anchor="middle">11%</text>
+<path class="solid" d="M751,270 V266.1 a4,4 0 0 1 4,-4 h26 a4,4 0 0 1 4,4 V270 z"/>
+<text class="s" x="768" y="256.1" text-anchor="middle">4.4%</text>
+
+<text class="t" x="512" y="290" text-anchor="middle">dog</text>
+<text class="t" x="576" y="290" text-anchor="middle">wolf</text>
+<text class="t" x="640" y="290" text-anchor="middle">fox</text>
+<text class="t" x="704" y="290" text-anchor="middle">cat</text>
+<text class="t" x="768" y="290" text-anchor="middle">car</text>
+
+<text class="s" x="20" y="322">At T = 4 the student can see that a dog looks much more like a wolf than like a car. That is the dark knowledge.</text>
+</svg>

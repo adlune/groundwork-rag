@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 324" role="img" aria-labelledby="title desc">
+<title id="title">LoRA low-rank update</title>
+<desc id="desc">LoRA computes adapted weights W prime as W plus B times A. W is a frozen 4096 by 4096 matrix with 16.8 million parameters. B is 4096 by 8 and A is 8 by 4096, both trainable. Together they hold 65,536 parameters, 0.4% of W. The rank r equals 8.</desc>
+<style>
+:root{--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--line:#0b0b0b;--hair:#c3c2b7;--grid:#e1e0d9;--gray:#ecebe7;--bar:#b9b8b2;--accent:#2a78d6;--accent-wash:#e3eefb}
+@media (prefers-color-scheme:dark){:root{--surface:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--muted:#898781;--line:#d6d5d0;--hair:#4a4a45;--grid:#2c2c2a;--gray:#2a2a28;--bar:#5c5b57;--accent:#3987e5;--accent-wash:#17293f}}
+text{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;fill:var(--ink)}
+.bg{fill:var(--surface)}
+.box{fill:var(--surface);stroke:var(--line);stroke-width:1.2}
+.panel{fill:var(--gray)}
+.gray{fill:var(--gray);stroke:var(--line);stroke-width:1.2}
+.accent{fill:var(--accent-wash);stroke:var(--accent);stroke-width:1.5}
+.rim{fill:none;stroke:var(--accent);stroke-width:1.5}
+.solid{fill:var(--accent)}
+.bar{fill:var(--bar)}
+.dot{fill:var(--ink)}
+.grid{stroke:var(--grid);stroke-width:1}
+.axis{stroke:var(--hair);stroke-width:1;fill:none}
+.arrow{stroke:var(--ink2);stroke-width:1.6;fill:none}
+.head{fill:var(--ink2)}
+.lock{fill:none;stroke:var(--ink2);stroke-width:1.6}
+.lockbody{fill:var(--ink2)}
+.h{font-size:15px;font-weight:600}
+.lane{font-size:14px;font-weight:600}
+.lane-s{font-size:12px;font-weight:400;fill:var(--ink2)}
+.b{font-size:13px;font-weight:600}
+.t{font-size:13px}
+.s{font-size:12px;fill:var(--ink2)}
+.m{font-size:11px;fill:var(--muted)}
+.op{font-size:26px;fill:var(--ink2)}
+.big{font-size:30px;font-weight:600}
+.model{font-size:18px;font-weight:600}
+.mono{font-family:ui-monospace,"Cascadia Code",Consolas,monospace}
+</style>
+<rect class="bg" width="820" height="324" rx="12"/>
+
+<!-- W' -->
+<rect class="box" x="20" y="40" width="160" height="160" rx="6"/>
+<text class="big" x="100" y="131" text-anchor="middle">W′</text>
+<text class="op" x="208" y="130" text-anchor="middle">=</text>
+
+<!-- W (frozen) -->
+<rect class="gray" x="236" y="40" width="160" height="160" rx="6"/>
+<text class="big" x="316" y="131" text-anchor="middle">W</text>
+<path class="lock" d="M375,56 v-3 a3,3 0 0 1 6,0 v3"/>
+<rect class="lockbody" x="372" y="56" width="12" height="9" rx="2"/>
+<text class="op" x="424" y="130" text-anchor="middle">+</text>
+
+<!-- B (tall, thin) -->
+<rect class="solid" x="450" y="40" width="22" height="160" rx="4"/>
+<text class="b" x="461" y="30" text-anchor="middle">B</text>
+<text class="op" x="490" y="128" text-anchor="middle">·</text>
+
+<!-- A (wide, thin) -->
+<rect class="solid" x="508" y="109" width="160" height="22" rx="4"/>
+<text class="b" x="588" y="100" text-anchor="middle">A</text>
+<path class="axis" d="M676,109 h4 v22 h-4"/>
+<text class="s" x="688" y="124">r = 8</text>
+
+<!-- labels -->
+<text class="s" x="100" y="226" text-anchor="middle">adapted weights</text>
+<text class="m" x="100" y="244" text-anchor="middle">used at inference</text>
+<text class="s" x="316" y="226" text-anchor="middle">frozen, 4096 × 4096</text>
+<text class="m" x="316" y="244" text-anchor="middle">16.8M parameters</text>
+<text class="s" x="461" y="226" text-anchor="middle">4096 × 8</text>
+<text class="m" x="461" y="244" text-anchor="middle">trainable</text>
+<text class="s" x="588" y="226" text-anchor="middle">8 × 4096</text>
+<text class="m" x="588" y="244" text-anchor="middle">trainable</text>
+
+<text class="t" x="20" y="288">Only B and A are trained: 2 × 4096 × 8 = 65,536 numbers, 0.4% of the 16.8M in W.</text>
+<text class="s" x="20" y="308">r is the rank. The update B·A can only change W along r = 8 independent directions.</text>
+</svg>

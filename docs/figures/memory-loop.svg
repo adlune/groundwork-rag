@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 290" role="img" aria-labelledby="title desc">
+<title id="title">Long-term memory loop</title>
+<desc id="desc">In conversation 1, week 1, a student says they are learning Python, that recursion confuses them and that they like short examples. The system writes three facts to a memory store. In conversation 2, week 3, it reads them back and adds them to the prompt before the new question. The model never changes.</desc>
+<style>
+:root{--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--line:#0b0b0b;--hair:#c3c2b7;--grid:#e1e0d9;--gray:#ecebe7;--bar:#b9b8b2;--accent:#2a78d6;--accent-wash:#e3eefb}
+@media (prefers-color-scheme:dark){:root{--surface:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--muted:#898781;--line:#d6d5d0;--hair:#4a4a45;--grid:#2c2c2a;--gray:#2a2a28;--bar:#5c5b57;--accent:#3987e5;--accent-wash:#17293f}}
+text{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;fill:var(--ink)}
+.bg{fill:var(--surface)}
+.box{fill:var(--surface);stroke:var(--line);stroke-width:1.2}
+.panel{fill:var(--gray)}
+.gray{fill:var(--gray);stroke:var(--line);stroke-width:1.2}
+.accent{fill:var(--accent-wash);stroke:var(--accent);stroke-width:1.5}
+.rim{fill:none;stroke:var(--accent);stroke-width:1.5}
+.solid{fill:var(--accent)}
+.bar{fill:var(--bar)}
+.dot{fill:var(--ink)}
+.grid{stroke:var(--grid);stroke-width:1}
+.axis{stroke:var(--hair);stroke-width:1;fill:none}
+.arrow{stroke:var(--ink2);stroke-width:1.6;fill:none}
+.head{fill:var(--ink2)}
+.lock{fill:none;stroke:var(--ink2);stroke-width:1.6}
+.lockbody{fill:var(--ink2)}
+.h{font-size:15px;font-weight:600}
+.lane{font-size:14px;font-weight:600}
+.lane-s{font-size:12px;font-weight:400;fill:var(--ink2)}
+.b{font-size:13px;font-weight:600}
+.t{font-size:13px}
+.s{font-size:12px;fill:var(--ink2)}
+.m{font-size:11px;fill:var(--muted)}
+.op{font-size:26px;fill:var(--ink2)}
+.big{font-size:30px;font-weight:600}
+.model{font-size:18px;font-weight:600}
+.mono{font-family:ui-monospace,"Cascadia Code",Consolas,monospace}
+</style>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<rect class="bg" width="820" height="290" rx="12"/>
+
+<!-- Conversation 1 -->
+<text class="b" x="20" y="28">Conversation 1, week 1</text>
+<rect class="panel" x="20" y="40" width="230" height="170" rx="8"/>
+<rect class="box" x="34" y="56" width="202" height="36" rx="10"/>
+<text class="t" x="48" y="79">I'm learning Python.</text>
+<rect class="box" x="34" y="104" width="202" height="36" rx="10"/>
+<text class="t" x="48" y="127">Recursion still confuses me.</text>
+<rect class="box" x="34" y="152" width="202" height="36" rx="10"/>
+<text class="t" x="48" y="175">I like short examples.</text>
+
+<!-- Write -->
+<line class="arrow" x1="254" y1="125" x2="306" y2="125" marker-end="url(#ah)"/>
+<text class="m" x="280" y="114" text-anchor="middle">1. write</text>
+
+<!-- Memory store -->
+<path class="accent" d="M310,80 a100,10 0 0 1 200,0 v100 a100,10 0 0 1 -200,0 z"/>
+<path class="rim" d="M310,80 a100,10 0 0 0 200,0"/>
+<text class="b" x="410" y="112" text-anchor="middle">Memory store</text>
+<text class="s" x="410" y="136" text-anchor="middle">learning Python</text>
+<text class="s" x="410" y="154" text-anchor="middle">finds recursion hard</text>
+<text class="s" x="410" y="172" text-anchor="middle">prefers short examples</text>
+
+<!-- Read -->
+<line class="arrow" x1="514" y1="125" x2="566" y2="125" marker-end="url(#ah)"/>
+<text class="m" x="540" y="114" text-anchor="middle">2. read</text>
+
+<!-- Conversation 2 -->
+<text class="b" x="570" y="28">Conversation 2, week 3</text>
+<rect class="panel" x="570" y="40" width="230" height="170" rx="8"/>
+<rect class="accent" x="584" y="56" width="202" height="80" rx="6"/>
+<text class="b" x="596" y="76">Known about this student:</text>
+<text class="s" x="596" y="94">learning Python, finds</text>
+<text class="s" x="596" y="110">recursion hard, prefers</text>
+<text class="s" x="596" y="126">short examples</text>
+<rect class="box" x="584" y="148" width="202" height="44" rx="10"/>
+<text class="t" x="598" y="175">How do I reverse a list?</text>
+
+<text class="s" x="20" y="250">The model never changes. Memory is text written to a store and copied into future prompts.</text>
+<text class="m" x="20" y="270">Inside one conversation, short-term memory is just the message history resent on every turn.</text>
+</svg>

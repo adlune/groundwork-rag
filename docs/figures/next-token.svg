@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 416" role="img" aria-labelledby="title desc">
+<title id="title">Next-token prediction</title>
+<desc id="desc">Next-token probabilities measured from qwen3.5:4b for the text "The capital of France is". Paris 46.5%, located 5.9%, a 5.4%, known 4.2%, the 3.9%, newline 2.8%, underscores 2.5%, not 2.1%. The top 8 tokens hold 73% of the probability. In training, the loss for the real next token Paris is minus log of 0.465, which is 0.77.</desc>
+<style>
+:root{--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--line:#0b0b0b;--hair:#c3c2b7;--grid:#e1e0d9;--gray:#ecebe7;--bar:#b9b8b2;--accent:#2a78d6;--accent-wash:#e3eefb}
+@media (prefers-color-scheme:dark){:root{--surface:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--muted:#898781;--line:#d6d5d0;--hair:#4a4a45;--grid:#2c2c2a;--gray:#2a2a28;--bar:#5c5b57;--accent:#3987e5;--accent-wash:#17293f}}
+text{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;fill:var(--ink)}
+.bg{fill:var(--surface)}
+.box{fill:var(--surface);stroke:var(--line);stroke-width:1.2}
+.panel{fill:var(--gray)}
+.gray{fill:var(--gray);stroke:var(--line);stroke-width:1.2}
+.accent{fill:var(--accent-wash);stroke:var(--accent);stroke-width:1.5}
+.rim{fill:none;stroke:var(--accent);stroke-width:1.5}
+.solid{fill:var(--accent)}
+.bar{fill:var(--bar)}
+.dot{fill:var(--ink)}
+.grid{stroke:var(--grid);stroke-width:1}
+.axis{stroke:var(--hair);stroke-width:1;fill:none}
+.arrow{stroke:var(--ink2);stroke-width:1.6;fill:none}
+.head{fill:var(--ink2)}
+.lock{fill:none;stroke:var(--ink2);stroke-width:1.6}
+.lockbody{fill:var(--ink2)}
+.h{font-size:15px;font-weight:600}
+.lane{font-size:14px;font-weight:600}
+.lane-s{font-size:12px;font-weight:400;fill:var(--ink2)}
+.b{font-size:13px;font-weight:600}
+.t{font-size:13px}
+.s{font-size:12px;fill:var(--ink2)}
+.m{font-size:11px;fill:var(--muted)}
+.op{font-size:26px;fill:var(--ink2)}
+.big{font-size:30px;font-weight:600}
+.model{font-size:18px;font-weight:600}
+.mono{font-family:ui-monospace,"Cascadia Code",Consolas,monospace}
+</style>
+<rect class="bg" width="720" height="416" rx="12"/>
+
+<text class="h" x="20" y="30">The capital of France is ...</text>
+<text class="s" x="20" y="52">Next-token probabilities from qwen3.5:4b (top 8 of the whole vocabulary)</text>
+
+<!-- gridlines at 10% steps, 880 px = 100% -->
+<line class="grid" x1="248" y1="68" x2="248" y2="318"/>
+<line class="grid" x1="336" y1="68" x2="336" y2="318"/>
+<line class="grid" x1="424" y1="68" x2="424" y2="318"/>
+<line class="grid" x1="512" y1="68" x2="512" y2="318"/>
+<line class="grid" x1="600" y1="68" x2="600" y2="318"/>
+<line class="axis" x1="160" y1="68" x2="160" y2="318"/>
+<text class="m" x="160" y="336" text-anchor="middle">0%</text>
+<text class="m" x="248" y="336" text-anchor="middle">10%</text>
+<text class="m" x="336" y="336" text-anchor="middle">20%</text>
+<text class="m" x="424" y="336" text-anchor="middle">30%</text>
+<text class="m" x="512" y="336" text-anchor="middle">40%</text>
+<text class="m" x="600" y="336" text-anchor="middle">50%</text>
+
+<!-- rows: top = 74 + 30i, bar height 18 -->
+<text class="t mono" x="150" y="87" text-anchor="end">Paris</text>
+<path class="solid" d="M160,74 h405.4 a4,4 0 0 1 4,4 v10 a4,4 0 0 1 -4,4 h-405.4 z"/>
+<text class="s" x="575.4" y="87">46.5%</text>
+
+<text class="t mono" x="150" y="117" text-anchor="end">located</text>
+<path class="bar" d="M160,104 h48.1 a4,4 0 0 1 4,4 v10 a4,4 0 0 1 -4,4 h-48.1 z"/>
+<text class="s" x="218.1" y="117">5.9%</text>
+
+<text class="t mono" x="150" y="147" text-anchor="end">a</text>
+<path class="bar" d="M160,134 h43.4 a4,4 0 0 1 4,4 v10 a4,4 0 0 1 -4,4 h-43.4 z"/>
+<text class="s" x="213.4" y="147">5.4%</text>
+
+<text class="t mono" x="150" y="177" text-anchor="end">known</text>
+<path class="bar" d="M160,164 h32.5 a4,4 0 0 1 4,4 v10 a4,4 0 0 1 -4,4 h-32.5 z"/>
+<text class="s" x="202.5" y="177">4.2%</text>
+
+<text class="t mono" x="150" y="207" text-anchor="end">the</text>
+<path class="bar" d="M160,194 h30.8 a4,4 0 0 1 4,4 v10 a4,4 0 0 1 -4,4 h-30.8 z"/>
+<text class="s" x="200.8" y="207">3.9%</text>
+
+<text class="t mono" x="150" y="237" text-anchor="end">(newline)</text>
+<path class="bar" d="M160,224 h20.5 a4,4 0 0 1 4,4 v10 a4,4 0 0 1 -4,4 h-20.5 z"/>
+<text class="s" x="190.5" y="237">2.8%</text>
+
+<text class="t mono" x="150" y="267" text-anchor="end">______</text>
+<path class="bar" d="M160,254 h18 a4,4 0 0 1 4,4 v10 a4,4 0 0 1 -4,4 h-18 z"/>
+<text class="s" x="188" y="267">2.5%</text>
+
+<text class="t mono" x="150" y="297" text-anchor="end">not</text>
+<path class="bar" d="M160,284 h14.1 a4,4 0 0 1 4,4 v10 a4,4 0 0 1 -4,4 h-14.1 z"/>
+<text class="s" x="184.1" y="297">2.1%</text>
+
+<text class="s" x="20" y="366">In training, the loss for the real next token "Paris" is −log(0.465) = 0.77.</text>
+<text class="s" x="20" y="384">Backpropagation adjusts the weights to raise that probability and lower the loss.</text>
+<text class="s" x="20" y="402">The top 8 tokens hold 73% of the probability; the rest is spread over the vocabulary.</text>
+</svg>

@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 390" role="img" aria-labelledby="title desc">
+<title id="title">RAG pipeline</title>
+<desc id="desc">Indexing runs when documents change: documents are chunked, each chunk is embedded into a vector, and vectors are stored with their text and source in a vector database. Querying runs for every question: the question is embedded with the same model, semantic search finds the k most similar chunks in the vector database, a prompt is built with the chunks in the context window, and the LLM writes an answer with citations.</desc>
+<style>
+:root{--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--line:#0b0b0b;--hair:#c3c2b7;--grid:#e1e0d9;--gray:#ecebe7;--bar:#b9b8b2;--accent:#2a78d6;--accent-wash:#e3eefb}
+@media (prefers-color-scheme:dark){:root{--surface:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--muted:#898781;--line:#d6d5d0;--hair:#4a4a45;--grid:#2c2c2a;--gray:#2a2a28;--bar:#5c5b57;--accent:#3987e5;--accent-wash:#17293f}}
+text{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;fill:var(--ink)}
+.bg{fill:var(--surface)}
+.box{fill:var(--surface);stroke:var(--line);stroke-width:1.2}
+.panel{fill:var(--gray)}
+.gray{fill:var(--gray);stroke:var(--line);stroke-width:1.2}
+.accent{fill:var(--accent-wash);stroke:var(--accent);stroke-width:1.5}
+.rim{fill:none;stroke:var(--accent);stroke-width:1.5}
+.solid{fill:var(--accent)}
+.bar{fill:var(--bar)}
+.dot{fill:var(--ink)}
+.grid{stroke:var(--grid);stroke-width:1}
+.axis{stroke:var(--hair);stroke-width:1;fill:none}
+.arrow{stroke:var(--ink2);stroke-width:1.6;fill:none}
+.head{fill:var(--ink2)}
+.lock{fill:none;stroke:var(--ink2);stroke-width:1.6}
+.lockbody{fill:var(--ink2)}
+.h{font-size:15px;font-weight:600}
+.lane{font-size:14px;font-weight:600}
+.lane-s{font-size:12px;font-weight:400;fill:var(--ink2)}
+.b{font-size:13px;font-weight:600}
+.t{font-size:13px}
+.s{font-size:12px;fill:var(--ink2)}
+.m{font-size:11px;fill:var(--muted)}
+.op{font-size:26px;fill:var(--ink2)}
+.big{font-size:30px;font-weight:600}
+.model{font-size:18px;font-weight:600}
+.mono{font-family:ui-monospace,"Cascadia Code",Consolas,monospace}
+</style>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<rect class="bg" width="860" height="390" rx="12"/>
+
+<!-- Lane 1: indexing -->
+<text class="lane" x="20" y="28">1. Indexing <tspan class="lane-s">runs when documents change</tspan></text>
+
+<rect class="box" x="20" y="44" width="140" height="60" rx="8"/>
+<text class="b" x="90" y="70" text-anchor="middle">Documents</text>
+<text class="s" x="90" y="88" text-anchor="middle">PDF, Markdown, TXT</text>
+<line class="arrow" x1="162" y1="74" x2="188" y2="74" marker-end="url(#ah)"/>
+
+<rect class="box" x="190" y="44" width="140" height="60" rx="8"/>
+<text class="b" x="260" y="70" text-anchor="middle">Chunk</text>
+<text class="s" x="260" y="88" text-anchor="middle">split into passages</text>
+<line class="arrow" x1="332" y1="74" x2="358" y2="74" marker-end="url(#ah)"/>
+
+<rect class="box" x="360" y="44" width="140" height="60" rx="8"/>
+<text class="b" x="430" y="70" text-anchor="middle">Embed</text>
+<text class="s" x="430" y="88" text-anchor="middle">text to vector</text>
+<line class="arrow" x1="502" y1="74" x2="528" y2="74" marker-end="url(#ah)"/>
+
+<path class="accent" d="M530,48 a75,8 0 0 1 150,0 v56 a75,8 0 0 1 -150,0 z"/>
+<path class="rim" d="M530,48 a75,8 0 0 0 150,0"/>
+<text class="b" x="605" y="80" text-anchor="middle">Vector database</text>
+<text class="s" x="605" y="98" text-anchor="middle">vectors + text + source</text>
+
+<!-- Lane 2: querying -->
+<text class="lane" x="20" y="160">2. Querying <tspan class="lane-s">runs for every question</tspan></text>
+
+<rect class="box" x="20" y="176" width="140" height="60" rx="8"/>
+<text class="b" x="90" y="202" text-anchor="middle">Question</text>
+<text class="s" x="90" y="220" text-anchor="middle">from the user</text>
+<line class="arrow" x1="162" y1="206" x2="188" y2="206" marker-end="url(#ah)"/>
+
+<rect class="box" x="190" y="176" width="140" height="60" rx="8"/>
+<text class="b" x="260" y="202" text-anchor="middle">Embed</text>
+<text class="s" x="260" y="220" text-anchor="middle">same model</text>
+<line class="arrow" x1="332" y1="206" x2="528" y2="206" marker-end="url(#ah)"/>
+<text class="m" x="430" y="198" text-anchor="middle">query vector</text>
+
+<line class="arrow" x1="605" y1="114" x2="605" y2="174" marker-end="url(#ah)"/>
+<text class="m" x="613" y="148">chunks + scores</text>
+
+<rect class="box" x="530" y="176" width="150" height="60" rx="8"/>
+<text class="b" x="605" y="202" text-anchor="middle">Semantic search</text>
+<text class="s" x="605" y="220" text-anchor="middle">k most similar chunks</text>
+<line class="arrow" x1="682" y1="206" x2="708" y2="206" marker-end="url(#ah)"/>
+
+<rect class="box" x="710" y="176" width="130" height="60" rx="8"/>
+<text class="b" x="775" y="202" text-anchor="middle">Build prompt</text>
+<text class="s" x="775" y="220" text-anchor="middle">chunks in context</text>
+<line class="arrow" x1="775" y1="238" x2="775" y2="304" marker-end="url(#ah)"/>
+
+<rect class="gray" x="710" y="306" width="130" height="60" rx="8"/>
+<text class="b" x="775" y="332" text-anchor="middle">LLM</text>
+<text class="s" x="775" y="350" text-anchor="middle">answers from chunks</text>
+<line class="arrow" x1="708" y1="336" x2="682" y2="336" marker-end="url(#ah)"/>
+
+<rect class="box" x="530" y="306" width="150" height="60" rx="8"/>
+<text class="b" x="605" y="332" text-anchor="middle">Answer</text>
+<text class="s" x="605" y="350" text-anchor="middle">with citations [1] [2]</text>
+</svg>
