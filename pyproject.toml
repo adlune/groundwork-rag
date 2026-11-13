@@ -16,9 +16,6 @@ dependencies = [
     "pyyaml>=6.0",
 ]
 
-[project.optional-dependencies]
-anthropic = ["anthropic>=0.40"]
-
 [dependency-groups]
 dev = ["pytest>=8.0", "ruff>=0.6"]
 

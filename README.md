@@ -39,7 +39,7 @@ Answers are generated locally with [Ollama](https://ollama.com) by default. Inst
 ollama pull qwen3.5:4b
 ```
 
-To use Claude instead, copy **.env.example** to **.env**, set `LLM_PROVIDER=anthropic` and add your API key.
+Settings like the model, the chunk size or the similarity threshold can be changed by copying **.env.example** to **.env**.
 
 The documents the app answers questions about are listed in **data/sources.yaml**: six papers and reports (PDF) plus the research notes in this repo (Markdown). The PDFs aren't stored in the repo, so download them first:
 
@@ -47,12 +47,13 @@ The documents the app answers questions about are listed in **data/sources.yaml*
 uv run python scripts/download_corpus.py           # PDFs into data/raw/
 uv run python scripts/ingest.py                    # chunk, embed and store in data/chroma/
 uv run python scripts/search.py "How does LoRA work?"   # semantic search, no LLM
+uv run python scripts/ask.py "How does LoRA work?"      # full answer with cited sources
 uv run pytest                                      # tests
 ```
 
 Running **ingest.py** again only embeds what changed. `scripts/inspect_chunks.py --show 3` prints chunk statistics and samples without embedding anything.
 
-Commands for running the app will be added as they are built.
+The app refuses in two ways. If no chunk is similar enough to the question (`MIN_SIMILARITY` in **.env**), it answers right away that it doesn't have the information, without calling the model. If the chunks are on topic but don't contain the answer, the model is instructed to say so instead of guessing.
 
 ## About
 
