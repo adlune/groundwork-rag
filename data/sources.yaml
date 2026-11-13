@@ -1,0 +1,57 @@
+# Documents the RAG app answers questions about.
+#
+# PDFs are downloaded by scripts/download_corpus.py into data/raw/ and are not committed
+# (arXiv papers are not freely redistributable; the OWASP PDF is large).
+# Markdown files are this repo's own research notes.
+
+documents:
+  - id: lewis2020-rag
+    title: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks (Lewis et al., 2020)
+    url: https://arxiv.org/pdf/2005.11401
+    file: data/raw/lewis2020-rag.pdf
+    license: arXiv non-exclusive distribution license
+
+  - id: hu2021-lora
+    title: "LoRA: Low-Rank Adaptation of Large Language Models (Hu et al., 2021)"
+    url: https://arxiv.org/pdf/2106.09685
+    file: data/raw/hu2021-lora.pdf
+    license: arXiv non-exclusive distribution license
+
+  - id: hinton2015-distillation
+    title: Distilling the Knowledge in a Neural Network (Hinton et al., 2015)
+    url: https://arxiv.org/pdf/1503.02531
+    file: data/raw/hinton2015-distillation.pdf
+    license: arXiv non-exclusive distribution license
+
+  - id: packer2023-memgpt
+    title: "MemGPT: Towards LLMs as Operating Systems (Packer et al., 2023)"
+    url: https://arxiv.org/pdf/2310.08560
+    file: data/raw/packer2023-memgpt.pdf
+    license: arXiv non-exclusive distribution license
+
+  - id: gururangan2020-dapt
+    title: "Don't Stop Pretraining: Adapt Language Models to Domains and Tasks (Gururangan et al., 2020)"
+    url: https://arxiv.org/pdf/2004.10964
+    file: data/raw/gururangan2020-dapt.pdf
+    license: arXiv non-exclusive distribution license
+
+  - id: owasp2025-llm-top10
+    title: OWASP Top 10 for LLM Applications 2025
+    url: https://raw.githubusercontent.com/OWASP/www-project-top-10-for-large-language-model-applications/main/assets/PDF/OWASP-Top-10-for-LLMs-v2025.pdf
+    file: data/raw/owasp2025-llm-top10.pdf
+    license: CC BY-SA 4.0
+
+  - id: research-prompting
+    file: docs/research/01-prompting.md
+  - id: research-pretraining
+    file: docs/research/02-pretraining.md
+  - id: research-fine-tuning
+    file: docs/research/03-fine-tuning.md
+  - id: research-rag
+    file: docs/research/04-rag.md
+  - id: research-memory
+    file: docs/research/05-memory.md
+  - id: research-distillation
+    file: docs/research/06-distillation.md
+  - id: research-comparison
+    file: docs/research/comparison.md

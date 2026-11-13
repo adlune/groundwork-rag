@@ -41,7 +41,15 @@ ollama pull qwen3.5:4b
 
 To use Claude instead, copy **.env.example** to **.env**, set `LLM_PROVIDER=anthropic` and add your API key.
 
-Commands for downloading the documents, building the index and running the app will be added as they are built.
+The documents the app answers questions about are listed in **data/sources.yaml**: six papers and reports (PDF) plus the research notes in this repo (Markdown). The PDFs aren't stored in the repo, so download them first:
+
+```bash
+uv run python scripts/download_corpus.py      # PDFs into data/raw/
+uv run python scripts/inspect_chunks.py --show 3   # chunk statistics and samples
+uv run pytest                                 # tests
+```
+
+Commands for building the index and running the app will be added as they are built.
 
 ## About
 
