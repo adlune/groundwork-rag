@@ -15,14 +15,19 @@ import time
 from groundwork.config import PROJECT_ROOT, get_settings
 from groundwork.embeddings import SentenceTransformerEmbedder, get_embedder
 from groundwork.evaluation import (
+    SIMILARITY_GRID,
     Run,
     admits_not_found,
     best_interval_midpoint,
+    calibrate_gate,
     first_relevant_rank,
     gate_errors,
+    gate_points,
     is_relevant,
     load_questions,
+    random_hit_at_k,
     retrieval_metrics,
+    split_half_cv,
 )
 from groundwork.keyword import KeywordIndex
 from groundwork.llm import get_llm
@@ -36,20 +41,10 @@ RESULTS = PROJECT_ROOT / "eval" / "results.json"
 OFF = 9.0  # a keyword threshold no score can reach: keyword rescue disabled
 
 
-def frange(lo: float, hi: float, step: float) -> list[float]:
-    return [round(lo + i * step, 3) for i in range(round((hi - lo) / step) + 1)]
-
-
 def calibrate_similarity(runs: list[Run]) -> tuple[float, int]:
-    taus = frange(0.40, 0.80, 0.005)
-    errors = [sum(map(len, gate_errors(runs, t, OFF))) for t in taus]
-    return best_interval_midpoint(taus, errors)
-
-
-def calibrate_keyword(runs: list[Run], tau: float) -> tuple[float, int]:
-    betas = frange(0.30, 1.00, 0.01)
-    errors = [sum(map(len, gate_errors(runs, tau, b))) for b in betas]
-    return best_interval_midpoint(betas, errors)
+    """Similarity threshold alone, for the configurations without keyword search."""
+    errors = [sum(map(len, gate_errors(runs, t, OFF))) for t in SIMILARITY_GRID]
+    return best_interval_midpoint(SIMILARITY_GRID, errors)
 
 
 def main() -> int:
@@ -70,10 +65,12 @@ def main() -> int:
         return 1
     counts = {t: sum(q.type == t for q in questions) for t in ("answerable", "out_of_scope", "unanswerable")}
     print(f"{len(questions)} questions: {counts}\n")
+    relevant_counts = {q.id: sum(is_relevant(c, q) for c in chunks) for q in questions if q.type == "answerable"}
+    random_baseline = random_hit_at_k(chunks, questions, k)
 
     # 1. Retrieval under three configurations.
     embedder = get_embedder(settings)
-    plain = SentenceTransformerEmbedder(settings.embedding_model, query_instruction="")
+    plain = SentenceTransformerEmbedder(settings.embedding_model, "", settings.embedding_revision)
     plain._model = embedder.model  # same weights, only the query prefix differs
     index = KeywordIndex(store.texts())
     configs = {
@@ -92,6 +89,7 @@ def main() -> int:
         for style in ("direct", "paraphrase", "short", "all"):
             m = metrics[name][style]
             print(f"| {name} | {style} | {m['n']} | {m['hit@1']:.2f} | {m['hit@k']:.2f} | {m['mrr']:.2f} |")
+    print(f"| random chunks (expected) | all | {counts['answerable']} | | {random_baseline:.2f} | |")
 
     # 2. Gate calibration.
     print("\n## Refusal gate\n")
@@ -104,11 +102,21 @@ def main() -> int:
         gate[name] = {"min_similarity": tau, "false_refusals": fr, "false_accepts": fa}
         print(f"| {name} | similarity ≥ {tau} | {len(fr)} {fr} | {len(fa)} {fa} |")
     hybrid = runs["hybrid (dense + BM25)"]
-    tau, _ = calibrate_similarity(hybrid)
-    beta, _ = calibrate_keyword(hybrid, tau)
+    tau, beta, _ = calibrate_gate(gate_points(hybrid))
     fr, fa = gate_errors(hybrid, tau, beta)
     gate["hybrid (dense + BM25)"] = {"min_similarity": tau, "min_keyword": beta, "false_refusals": fr, "false_accepts": fa}
     print(f"| hybrid (dense + BM25) | similarity ≥ {tau} or keyword ≥ {beta} | {len(fr)} {fr} | {len(fa)} {fa} |")
+    if (tau, beta) != (settings.min_similarity, settings.min_keyword):
+        print(f"\nNote: the app uses similarity ≥ {settings.min_similarity} or keyword ≥ {settings.min_keyword} (config.py).")
+
+    # How much the thresholds depend on which questions they were tuned on.
+    cv = split_half_cv(gate_points(hybrid))
+    gate["hybrid (dense + BM25)"]["split_half_cv"] = cv
+    print(f"\nSplit-half cross-validation ({cv['splits']} random splits, calibrate on one half, test on the other):")
+    print(f"- held-out false refusals: {cv['heldout_false_refusal_rate']:.1%} of answerable questions")
+    print(f"- held-out false accepts: {cv['heldout_false_accept_rate']:.1%} of off-topic questions")
+    print(f"- similarity threshold, 5th/50th/95th percentile: {cv['min_similarity_5_50_95']}")
+    print(f"- keyword threshold, 5th/50th/95th percentile: {cv['min_keyword_5_50_95']}")
 
     print("\n## Per question (hybrid)\n")
     print("| id | type | best similarity | best keyword | first relevant rank | answered? |")
@@ -125,7 +133,15 @@ def main() -> int:
         })
         print(f"| {q.id} | {q.type} | {run.best_dense:.3f} | {run.best_keyword:.2f} | {rank or '-'} | {'yes' if accepted else 'no'} |")
 
-    results = {"top_k": k, "retrieval": metrics, "gate": gate, "per_question": per_question}
+    results = {
+        "top_k": k,
+        "corpus_chunks": len(chunks),
+        "retrieval": metrics,
+        "random_hit@k": round(random_baseline, 3),
+        "relevant_chunks_per_question": relevant_counts,
+        "gate": gate,
+        "per_question": per_question,
+    }
 
     # 3. Optional: the full pipeline with the real model.
     if args.generate:

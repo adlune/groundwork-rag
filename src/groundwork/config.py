@@ -22,11 +22,18 @@ class Settings(BaseSettings):
     # 5 chunks x 350 tokens + instructions is ~2,500 tokens, so give it room.
     ollama_num_ctx: int = 8192
     llm_timeout: float = 180.0  # seconds; a local model on CPU/small GPU can be slow
+    # Temperature 0 always picks the most likely next word, and the seed fixes any
+    # remaining sampling, so the same prompt gives the same answer and runs can be compared.
+    ollama_temperature: float = 0.0
+    ollama_seed: int = 42
 
     # --- Retrieval (the "R" in RAG) ---
     embedding_model: str = "BAAI/bge-small-en-v1.5"
+    # The exact Hugging Face snapshot (a git commit of the model repo). If the model is
+    # ever updated upstream, the index and the published results still match this one.
+    embedding_revision: str = "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a"
     # BGE models are trained to embed short search queries with this prefix and
-    # documents without it (asymmetric retrieval). See notes, chapter 8.
+    # documents without it (asymmetric retrieval). Measured in docs/evaluation.md.
     query_instruction: str = "Represent this sentence for searching relevant passages: "
     chroma_dir: Path = PROJECT_ROOT / "data" / "chroma"
     collection: str = "groundwork"

@@ -19,7 +19,7 @@ questions:
     type: answerable
     style: direct
     question: How does LoRA reduce the number of trainable parameters?
-    evidence: [low-rank, rank decomposition]
+    evidence: [rank decomposition, learn a low-rank update]
 
   - id: dark-knowledge
     type: answerable
@@ -38,19 +38,19 @@ questions:
     type: answerable
     style: direct
     question: How does MemGPT manage its limited context window?
-    evidence: [virtual context, main context, paging]
+    evidence: [virtual context management, virtual memory, paging memories]
 
   - id: dapt
     type: answerable
     style: direct
     question: What is domain-adaptive pretraining?
-    evidence: [domain-adaptive, DAPT]
+    evidence: [domain-adaptive]
 
   - id: tapt
     type: answerable
     style: direct
     question: What is task-adaptive pretraining and how does it differ from DAPT?
-    evidence: [TAPT, task-adaptive]
+    evidence: [task-adaptive]
 
   - id: indirect-injection
     type: answerable
@@ -68,7 +68,7 @@ questions:
     type: answerable
     style: direct
     question: What are the two RAG formulations proposed by Lewis et al.?
-    evidence: [RAG-Sequence, RAG-Token]
+    evidence: [RAG-Sequence Model, RAG-Token Model, RAG-Sequence and RAG-Token]
 
   - id: catastrophic-forgetting
     type: answerable
@@ -112,7 +112,7 @@ questions:
     type: answerable
     style: paraphrase
     question: Can attackers plant malicious text in the documents a chatbot reads?
-    evidence: [poisoning, indirect prompt injection]
+    evidence: [Knowledge-base poisoning, Indirect prompt injections occur, hidden text in a web page]
 
   - id: search-vs-retrain
     type: answerable

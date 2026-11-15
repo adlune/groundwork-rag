@@ -11,6 +11,8 @@ class OllamaProvider:
         model: str,
         base_url: str = "http://localhost:11434",
         num_ctx: int = 8192,
+        temperature: float = 0.0,
+        seed: int | None = 42,
         timeout: float = 180.0,
         client: httpx.Client | None = None,
     ):
@@ -18,6 +20,8 @@ class OllamaProvider:
         self.name = f"ollama/{model}"
         self.base_url = base_url.rstrip("/")
         self.num_ctx = num_ctx
+        self.temperature = temperature
+        self.seed = seed
         self.client = client or httpx.Client(timeout=timeout)
 
     def check(self) -> str | None:
@@ -45,9 +49,11 @@ class OllamaProvider:
             "options": {
                 "num_ctx": self.num_ctx,
                 # Low temperature: stick to the most likely wording, i.e. to the sources.
-                "temperature": 0.1,
+                "temperature": self.temperature,
             },
         }
+        if self.seed is not None:
+            payload["options"]["seed"] = self.seed
         try:
             resp = self.client.post(f"{self.base_url}/api/chat", json=payload)
         except httpx.ConnectError as exc:

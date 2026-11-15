@@ -89,8 +89,11 @@ This repository. It indexes research papers and notes about knowledge
 techniques. When a user asks "How does LoRA reduce the number of trainable parameters?",
 the app embeds the question, retrieves the most similar chunks (from the LoRA paper and
 the fine-tuning notes), shows their similarity scores, and asks the LLM to answer only from
-them with numbered citations. When asked "What is the capital of Australia?", no chunk is
-similar enough, so the app answers that the documents do not contain that information.
+them with numbered citations. When a question is about something the documents don't
+cover, like baking or football, no chunk is close enough in meaning or shares enough rare
+words with it, so the app says the documents do not contain that information without
+calling the LLM at all. When a question passes that check but the retrieved chunks still
+don't hold the answer, the instructions tell the LLM to say so instead of guessing.
 
 A typical business example: an internal help-desk bot over a company's HR policies,
 which change several times a year. Editing a policy document immediately changes the

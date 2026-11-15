@@ -23,6 +23,9 @@ def test_ollama_sends_system_prompt_context_size_and_no_thinking():
     assert sent["messages"][0] == {"role": "system", "content": "SYS"}
     assert sent["think"] is False and sent["stream"] is False
     assert sent["options"]["num_ctx"] == 8192
+    # Fixed by default so evaluation and attack runs can be repeated.
+    assert sent["options"]["temperature"] == 0.0
+    assert sent["options"]["seed"] == 42
 
 
 def test_ollama_missing_model_gives_a_helpful_error():

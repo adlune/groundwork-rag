@@ -70,3 +70,27 @@ def test_hybrid_search_adds_keyword_scores_and_dense_scores_for_every_hit(embedd
 
 def test_search_on_empty_store_returns_nothing(embedder, store):
     assert Retriever(embedder, store).search("anything", k=5) == []
+
+
+def test_two_fresh_stores_rank_the_same_way(embedder, tmp_path):
+    # Search is exact, so a store reopened from disk must give the same ranking and
+    # the same scores. The approximate index this replaced did not.
+    first = VectorStore(tmp_path / "chroma", "test", FakeEmbedder.name)
+    ingest(CHUNKS, embedder, first)
+    query = embedder.embed_query("small student model trains low rank matrices")
+    rankings = []
+    for _ in range(2):
+        reopened = VectorStore(tmp_path / "chroma", "test", FakeEmbedder.name)
+        rankings.append([(c.id, s) for c, s in reopened.query(query, k=3)])
+    assert rankings[0] == rankings[1]
+    assert rankings[0] == [(c.id, s) for c, s in first.query(query, k=3)]
+
+
+def test_search_sees_chunks_added_and_removed_after_the_first_query(embedder, store):
+    ingest(CHUNKS[:1], embedder, store)
+    query = embedder.embed_query("distillation student teacher")
+    assert [c.source_id for c, _ in store.query(query, k=5)] == ["lora"]
+    ingest(CHUNKS, embedder, store)
+    assert store.query(query, k=5)[0][0].source_id == "kd"
+    ingest(CHUNKS[:2], embedder, store)
+    assert "kd" not in {c.source_id for c, _ in store.query(query, k=5)}

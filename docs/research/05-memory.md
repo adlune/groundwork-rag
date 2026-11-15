@@ -98,6 +98,7 @@ also high-value targets for data theft because they concentrate personal informa
 
 ## References
 
+- Rehberger, J. (2024). *Spyware Injection Into Your ChatGPT's Long-Term Memory (SpAIware).* Embrace The Red blog, 20 September 2024. embracethered.com/blog/posts/2024/chatgpt-macos-app-persistent-data-exfiltration
 - Packer et al. (2023). *MemGPT: Towards LLMs as Operating Systems.* arXiv:2310.08560.
 - Park et al. (2023). *Generative Agents: Interactive Simulacra of Human Behavior.* arXiv:2304.03442.
 - Zhang et al. (2024). *A Survey on the Memory Mechanism of Large Language Model based Agents.* arXiv:2404.13501.

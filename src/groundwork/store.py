@@ -1,8 +1,11 @@
 """The vector database: ChromaDB, stored on disk in data/chroma/.
 
 Chroma keeps, for every chunk: its id, its vector, its text, and metadata (source,
-page, section...). Searching returns the chunks whose vectors are closest to the query
-vector, using an HNSW index so it doesn't have to compare against every vector.
+page, section...). Searching compares the query vector with every stored vector
+(exact search), not through Chroma's approximate HNSW index. With a few hundred chunks
+that is one small matrix product, and it returns the same ranking on every run. An
+HNSW index is rebuilt each time the program starts and can miss some of the true
+nearest chunks, so results moved between runs.
 """
 
 from pathlib import Path
@@ -67,6 +70,7 @@ class VectorStore:
         self.name = collection
         self.embedding_model = embedding_model
         self.collection = self._open()
+        self._matrix: tuple[list[str], np.ndarray] | None = None  # loaded on first query
 
     def _open(self):
         collection = self.client.get_or_create_collection(
@@ -90,6 +94,7 @@ class VectorStore:
         """Delete everything and start an empty collection."""
         self.client.delete_collection(self.name)
         self.collection = self._open()
+        self._matrix = None
 
     def count(self) -> int:
         return self.collection.count()
@@ -106,29 +111,44 @@ class VectorStore:
                 documents=[c.text for c in batch],
                 metadatas=[_to_metadata(c) for c in batch],
             )
+        self._matrix = None
 
     def delete(self, ids: set[str]) -> None:
         ids = list(ids)
         for i in range(0, len(ids), _BATCH):
             self.collection.delete(ids=ids[i : i + _BATCH])
+        self._matrix = None
+
+    def _vectors(self) -> tuple[list[str], np.ndarray]:
+        """All ids and vectors, sorted by id so ties always break the same way."""
+        if self._matrix is None:
+            got = self.collection.get(include=["embeddings"])
+            if not got["ids"]:
+                self._matrix = ([], np.zeros((0, 0), dtype=np.float32))
+            else:
+                order = sorted(range(len(got["ids"])), key=lambda i: got["ids"][i])
+                vectors = np.asarray(got["embeddings"], dtype=np.float32)
+                self._matrix = ([got["ids"][i] for i in order], vectors[order])
+        return self._matrix
 
     def query(self, vector: np.ndarray, k: int) -> list[tuple[Chunk, float]]:
         """The k nearest chunks with their cosine similarity (1 = same direction)."""
-        k = min(k, self.count())
+        ids, vectors = self._vectors()
+        k = min(k, len(ids))
         if k == 0:
             return []
-        res = self.collection.query(
-            query_embeddings=[vector.tolist()],
-            n_results=k,
-            include=["documents", "metadatas", "distances"],
-        )
-        return [
-            # Chroma returns cosine *distance* = 1 - cosine similarity.
-            (_from_record(cid, doc, meta), 1.0 - dist)
-            for cid, doc, meta, dist in zip(
-                res["ids"][0], res["documents"][0], res["metadatas"][0], res["distances"][0]
-            )
-        ]
+        # Vectors are normalized, so the dot product is the cosine similarity.
+        sims = vectors @ np.asarray(vector, dtype=np.float32)
+        top = np.argsort(-sims, kind="stable")[:k]
+        records = self._records([ids[i] for i in top])
+        return [(records[ids[i]], float(sims[i])) for i in top]
+
+    def _records(self, ids: list[str]) -> dict[str, Chunk]:
+        got = self.collection.get(ids=ids, include=["documents", "metadatas"])
+        return {
+            cid: _from_record(cid, doc, meta)
+            for cid, doc, meta in zip(got["ids"], got["documents"], got["metadatas"])
+        }
 
     def chunks(self) -> list[Chunk]:
         """Every stored chunk."""
@@ -148,13 +168,11 @@ class VectorStore:
         """
         if not ids:
             return []
-        got = self.collection.get(ids=ids, include=["documents", "metadatas", "embeddings"])
-        return [
-            (_from_record(cid, doc, meta), float(np.dot(np.asarray(emb), vector)))
-            for cid, doc, meta, emb in zip(
-                got["ids"], got["documents"], got["metadatas"], got["embeddings"]
-            )
-        ]
+        all_ids, vectors = self._vectors()
+        row = {cid: i for i, cid in enumerate(all_ids)}
+        sims = vectors @ np.asarray(vector, dtype=np.float32)
+        records = self._records(ids)
+        return [(records[cid], float(sims[row[cid]])) for cid in ids if cid in records]
 
     def documents(self) -> list[dict]:
         """One row per source document: id, title, path and number of chunks."""

@@ -66,3 +66,36 @@ def test_admits_not_found_recognizes_honest_wording():
     assert admits_not_found("The provided sources do not specify the exact GPU models.")
     assert admits_not_found("I don't have enough information in my documents to answer that.")
     assert not admits_not_found("LoRA trains two low-rank matrices [1].")
+
+
+def test_joint_calibration_puts_both_thresholds_inside_the_error_free_region():
+    from groundwork.evaluation import calibrate_gate, point_errors
+
+    points = [
+        (0.75, 0.20, "answerable"),  # passes on similarity
+        (0.52, 0.95, "answerable"),  # short question: passes only on keywords
+        (0.55, 0.40, "out_of_scope"),
+        (0.60, 0.50, "out_of_scope"),
+    ]
+    tau, beta, errors = calibrate_gate(points)
+    assert errors == 0 and point_errors(points, tau, beta) == (0, 0)
+    assert 0.60 < tau <= 0.75 and 0.50 < beta <= 0.95
+
+
+def test_split_half_cv_reports_heldout_rates():
+    from groundwork.evaluation import split_half_cv
+
+    points = [(0.7 + i / 100, 0.2, "answerable") for i in range(10)]
+    points += [(0.5 + i / 100, 0.3, "out_of_scope") for i in range(10)]
+    cv = split_half_cv(points, splits=50)
+    assert cv["splits"] == 50
+    # The two groups are separated, so every split calibrates cleanly.
+    assert cv["heldout_false_refusal_rate"] == 0 and cv["heldout_false_accept_rate"] == 0
+
+
+def test_random_retriever_baseline():
+    from groundwork.evaluation import random_hit_at_k
+
+    chunks = [make_chunk("QLoRA here")] + [make_chunk(f"filler {i}") for i in range(9)]
+    # One relevant chunk out of 10, five random picks: a 50% chance of hitting it.
+    assert abs(random_hit_at_k(chunks, [q("qlora")], k=5) - 0.5) < 1e-9

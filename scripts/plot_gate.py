@@ -38,7 +38,6 @@ X0, X1, Y0, Y1 = 70, 680, 430, 110  # plot area in pixels (y grows downward)
 XMIN, XMAX = 0.40, 0.90  # meaning score range shown
 
 LABELS = {  # point id -> (label, dx, dy, anchor) for a few telling points
-    "oos-australia": ("“capital of Australia”", -4, 22, "start"),
     "oos-kubernetes": ("“Kubernetes”", 8, -9, "start"),
     "copy-model-api": ("“copy a model via its API”", 8, 16, "start"),
 }
@@ -65,8 +64,7 @@ def main() -> None:
             f'<desc id="desc">Each evaluation question plotted by its best meaning score and best keyword '
             f"score. The gate accepts a question when meaning is at least {tau} or keywords at least {beta}. "
             "Answerable questions fall in the accepted area; short acronym questions are rescued by the "
-            "keyword score; off-topic questions fall outside, except one whose words appear in the "
-            "documents themselves.</desc>"
+            "keyword score; off-topic questions fall outside.</desc>"
         ),
         STYLE,
         f'<rect class="bg" width="{W}" height="{H}" rx="12"/>',

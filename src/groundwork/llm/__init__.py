@@ -11,6 +11,8 @@ def get_llm(settings: Settings | None = None) -> LLMProvider:
         model=settings.ollama_model,
         base_url=settings.ollama_base_url,
         num_ctx=settings.ollama_num_ctx,
+        temperature=settings.ollama_temperature,
+        seed=settings.ollama_seed,
         timeout=settings.llm_timeout,
     )
 

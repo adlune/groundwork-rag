@@ -14,7 +14,7 @@ Three programs run on the same computer. The **browser** shows the page, the **P
 | API | `src/groundwork/api.py` | Loads the models once at startup and answers `POST /api/ask` |
 | Search | `src/groundwork/retriever.py` | Runs meaning search and keyword search and merges the two rankings |
 | Embedding model | `src/groundwork/embeddings.py` | bge-small, turns text into a list of 384 numbers |
-| Vector database | `src/groundwork/store.py` | ChromaDB on disk: every chunk's text, vector and source |
+| Vector database | `src/groundwork/store.py` | ChromaDB on disk: every chunk's text, vector and source. Search compares the question with every vector |
 | Keyword index | `src/groundwork/keyword.py` | BM25, built in memory from the same chunks at startup |
 | Gate and prompt | `src/groundwork/rag.py`, `prompts.py` | Decides whether to answer, builds the prompt, maps citations |
 | Language model | `src/groundwork/llm/ollama.py` | Sends the prompt to qwen3.5:4b through Ollama |
@@ -35,7 +35,7 @@ The result: 402 chunks from 13 documents.
 
 ## Answering a question
 
-**1. Search by meaning.** The question is turned into a vector with the same model, and ChromaDB returns the chunks whose vectors point in the most similar direction (cosine similarity).
+**1. Search by meaning.** The question is turned into a vector with the same model and compared with every chunk's vector. The chunks whose vectors point in the most similar direction (cosine similarity) come first. With 402 chunks this exact comparison is a single small matrix product, so the app doesn't use ChromaDB's approximate index, which can miss some of the true nearest chunks and gives slightly different results each time it is rebuilt.
 
 **2. Search by keywords.** BM25 scores chunks by the question's words, giving rare words like "QLoRA" much more weight than common ones like "model". This catches short questions that give the embedding too little to work with.
 
@@ -45,7 +45,7 @@ The result: 402 chunks from 13 documents.
 
 **5. Build the prompt.** The chunks that passed are numbered `[1]` to `[n]` and wrapped in tags that mark them as untrusted reference material. The instructions tell the model to answer only from them, cite every statement, and say so if the answer isn't there.
 
-**6. Generate.** Ollama runs qwen3.5:4b on the GPU. With the models loaded, search takes tens of milliseconds and the answer about 5 to 6 seconds.
+**6. Generate.** Ollama runs qwen3.5:4b on the GPU, at temperature 0 and with a fixed seed so the same question gives the same answer. With the models loaded, search takes tens of milliseconds and the answer about 5 to 6 seconds.
 
 **7. Map citations and reply.** The `[n]` numbers in the answer are matched back to documents and pages. The browser receives the answer, the cited sources, and every retrieved chunk with its scores, which the retrieval inspector displays.
 
@@ -54,5 +54,6 @@ The result: 402 chunks from 13 documents.
 - **No RAG framework.** Chunking, search, the gate and the prompt are written by hand so every step can be read and explained.
 - **Two ways to refuse.** The gate refuses off-topic questions without calling the model. For on-topic questions the documents can't answer, the prompt tells the model to say so.
 - **Hybrid search.** Meaning search alone couldn't tell short questions apart from off-topic ones; adding keyword search fixed that ([evaluation](evaluation.md)).
-- **Documents are untrusted.** Retrieved text is marked as data in the prompt and never inserted into the page as HTML, so a malicious document can't give the model instructions or run code in the browser.
+- **Documents are untrusted.** Retrieved text is marked as data in the prompt, which makes it harder (not impossible) for a malicious document to give the model instructions. The page never inserts document text as HTML, so a document can't run code in the browser.
+- **Reproducible.** Exact search, a fixed model seed and pinned versions of every document and model mean an evaluation run can be repeated and gives the same results ([evaluation](evaluation.md#reproducibility)).
 - **Local and offline.** The model, embeddings and database all run on one machine. After the first run downloads the models, questions and documents never leave it.

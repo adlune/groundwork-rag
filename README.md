@@ -69,7 +69,7 @@ The app refuses in two ways. If no chunk reaches either threshold (`MIN_SIMILARI
 
 ## Evaluation
 
-The app was tested on 45 questions: answerable ones, off-topic ones, and on-topic ones the documents can't answer. Hybrid search finds a relevant passage in the top 5 for 79% of the answerable questions (100% of the short ones), the gate wrongly refuses none of them, and the model never made up an answer in the end-to-end run. Details, the failures and the limitations are in [docs/evaluation.md](docs/evaluation.md).
+The app was tested on 45 questions: answerable ones, off-topic ones, and on-topic ones the documents can't answer. Hybrid search finds a relevant passage in the top 5 for 79% of the 28 answerable questions (all 6 of the short ones), the gate wrongly refuses none of them, and every one of the 12 off-topic questions is refused. Results are reproducible: the same run gives the same file, answers included. Details, the failures and the limitations are in [docs/evaluation.md](docs/evaluation.md).
 
 ```bash
 uv run python scripts/evaluate.py              # retrieval and refusal gate

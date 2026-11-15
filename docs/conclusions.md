@@ -32,7 +32,7 @@ Semantic search has a blind spot: rare exact terms. "What is QLoRA?" scored 0.52
 
 - **Updates in seconds.** Changing a document and re-indexing it takes seconds; retraining takes hours to months and must be repeated for every change. Removing information is just as easy, which matters for privacy requests.
 - **Answers can be checked.** Every statement cites the passage it came from. A retrained model can't say where a fact came from.
-- **It can say "I don't know".** When the documents don't cover a question, the app refuses. In the evaluation, it declined all 5 questions whose answers weren't in the documents, and no answer made up facts.
+- **It can say "I don't know".** When the documents don't cover a question, the app refuses. In the evaluation, it declined all 5 questions whose answers weren't in the documents. Its answers still need their citations: one of them turned a source's statement around.
 - **Much cheaper.** No GPUs for training, no labelled dataset. This project runs entirely on one consumer GPU.
 - **Works with any model.** The model can be swapped (local or cloud) without touching the knowledge.
 - **Access control.** Different users can be limited to different documents at search time, which a single trained model can't do.

@@ -1,18 +1,19 @@
 {
   "top_k": 5,
+  "corpus_chunks": 402,
   "retrieval": {
     "dense, no query instruction": {
       "direct": {
         "n": 14,
-        "hit@1": 0.7142857142857143,
+        "hit@1": 0.6428571428571429,
         "hit@k": 0.8571428571428571,
-        "mrr": 0.7678571428571429
+        "mrr": 0.7321428571428571
       },
       "all": {
         "n": 28,
-        "hit@1": 0.42857142857142855,
+        "hit@1": 0.39285714285714285,
         "hit@k": 0.7142857142857143,
-        "mrr": 0.550595238095238
+        "mrr": 0.5327380952380952
       },
       "paraphrase": {
         "n": 8,
@@ -80,6 +81,37 @@
       }
     }
   },
+  "random_hit@k": 0.056,
+  "relevant_chunks_per_question": {
+    "lora-params": 4,
+    "dark-knowledge": 1,
+    "kd-temperature": 9,
+    "memgpt-context": 4,
+    "dapt": 5,
+    "tapt": 8,
+    "indirect-injection": 10,
+    "owasp-llm08": 3,
+    "rag-variants": 3,
+    "catastrophic-forgetting": 3,
+    "memory-layers": 7,
+    "distilbert": 4,
+    "lost-in-middle": 2,
+    "owasp-injection-mitigation": 4,
+    "remember-last-week": 7,
+    "plant-malicious-text": 3,
+    "search-vs-retrain": 3,
+    "big-teaches-small": 10,
+    "cheap-adaptation": 3,
+    "copy-model-api": 7,
+    "examples-change-weights": 4,
+    "confident-wrong-answers": 11,
+    "qlora": 4,
+    "dpo": 2,
+    "poisonedrag": 2,
+    "hnsw": 2,
+    "bm25": 4,
+    "letta": 1
+  },
   "gate": {
     "dense, no query instruction": {
       "min_similarity": 0.545,
@@ -92,7 +124,7 @@
       ]
     },
     "dense": {
-      "min_similarity": 0.65,
+      "min_similarity": 0.653,
       "false_refusals": [
         "qlora",
         "dpo",
@@ -107,9 +139,22 @@
       "min_similarity": 0.645,
       "min_keyword": 0.7,
       "false_refusals": [],
-      "false_accepts": [
-        "oos-australia"
-      ]
+      "false_accepts": [],
+      "split_half_cv": {
+        "splits": 300,
+        "heldout_false_refusal_rate": 0.002,
+        "heldout_false_accept_rate": 0.007,
+        "min_similarity_5_50_95": [
+          0.615,
+          0.645,
+          0.663
+        ],
+        "min_keyword_5_50_95": [
+          0.64,
+          0.7,
+          0.76
+        ]
+      }
     }
   },
   "per_question": [
@@ -199,7 +244,7 @@
       "style": "direct",
       "question": "What are the two RAG formulations proposed by Lewis et al.?",
       "best_similarity": 0.693,
-      "best_keyword": 0.649,
+      "best_keyword": 0.65,
       "first_relevant_rank": null,
       "passes_gate": true
     },
@@ -219,7 +264,7 @@
       "style": "direct",
       "question": "What is the difference between short-term and long-term memory in LLM assistants?",
       "best_similarity": 0.764,
-      "best_keyword": 0.63,
+      "best_keyword": 0.628,
       "first_relevant_rank": 1,
       "passes_gate": true
     },
@@ -239,7 +284,7 @@
       "style": "direct",
       "question": "What is the lost in the middle problem with long prompts?",
       "best_similarity": 0.742,
-      "best_keyword": 0.947,
+      "best_keyword": 0.946,
       "first_relevant_rank": 1,
       "passes_gate": true
     },
@@ -249,7 +294,7 @@
       "style": "direct",
       "question": "What does OWASP recommend to mitigate prompt injection?",
       "best_similarity": 0.786,
-      "best_keyword": 0.807,
+      "best_keyword": 0.805,
       "first_relevant_rank": null,
       "passes_gate": true
     },
@@ -289,7 +334,7 @@
       "style": "paraphrase",
       "question": "How can a big model teach a smaller one?",
       "best_similarity": 0.708,
-      "best_keyword": 0.756,
+      "best_keyword": 0.757,
       "first_relevant_rank": 4,
       "passes_gate": true
     },
@@ -329,7 +374,7 @@
       "style": "paraphrase",
       "question": "Why do language models sometimes state false things with confidence, and what helps?",
       "best_similarity": 0.727,
-      "best_keyword": 0.261,
+      "best_keyword": 0.262,
       "first_relevant_rank": 2,
       "passes_gate": true
     },
@@ -349,7 +394,7 @@
       "style": "short",
       "question": "What is DPO?",
       "best_similarity": 0.544,
-      "best_keyword": 0.885,
+      "best_keyword": 0.886,
       "first_relevant_rank": 2,
       "passes_gate": true
     },
@@ -369,7 +414,7 @@
       "style": "short",
       "question": "What is HNSW?",
       "best_similarity": 0.517,
-      "best_keyword": 0.992,
+      "best_keyword": 0.993,
       "first_relevant_rank": 1,
       "passes_gate": true
     },
@@ -399,9 +444,9 @@
       "style": null,
       "question": "What is the capital of Australia?",
       "best_similarity": 0.476,
-      "best_keyword": 1.0,
+      "best_keyword": 0.448,
       "first_relevant_rank": null,
-      "passes_gate": true
+      "passes_gate": false
     },
     {
       "id": "oos-cake",
@@ -409,7 +454,7 @@
       "style": null,
       "question": "Give me a recipe for chocolate cake.",
       "best_similarity": 0.506,
-      "best_keyword": 0.272,
+      "best_keyword": 0.273,
       "first_relevant_rank": null,
       "passes_gate": false
     },
@@ -419,7 +464,7 @@
       "style": null,
       "question": "Who won the 2018 football World Cup?",
       "best_similarity": 0.522,
-      "best_keyword": 0.394,
+      "best_keyword": 0.414,
       "first_relevant_rank": null,
       "passes_gate": false
     },
@@ -459,7 +504,7 @@
       "style": null,
       "question": "What's the weather like in Bogotá today?",
       "best_similarity": 0.462,
-      "best_keyword": 0.398,
+      "best_keyword": 0.397,
       "first_relevant_rank": null,
       "passes_gate": false
     },
@@ -479,7 +524,7 @@
       "style": null,
       "question": "How does castling work in chess?",
       "best_similarity": 0.554,
-      "best_keyword": 0.37,
+      "best_keyword": 0.371,
       "first_relevant_rank": null,
       "passes_gate": false
     },
@@ -508,7 +553,7 @@
       "type": "out_of_scope",
       "style": null,
       "question": "What is Kubernetes used for?",
-      "best_similarity": 0.617,
+      "best_similarity": 0.618,
       "best_keyword": 0.0,
       "first_relevant_rank": null,
       "passes_gate": false
@@ -529,7 +574,7 @@
       "style": null,
       "question": "How much does it cost to fine-tune a model with the OpenAI API?",
       "best_similarity": 0.723,
-      "best_keyword": 0.754,
+      "best_keyword": 0.755,
       "first_relevant_rank": null,
       "passes_gate": true
     },
@@ -539,7 +584,7 @@
       "style": null,
       "question": "How many parameters does GPT-5 have?",
       "best_similarity": 0.648,
-      "best_keyword": 0.971,
+      "best_keyword": 0.97,
       "first_relevant_rank": null,
       "passes_gate": true
     },
@@ -549,7 +594,7 @@
       "style": null,
       "question": "Which vector database does ChatGPT's memory feature use internally?",
       "best_similarity": 0.788,
-      "best_keyword": 0.678,
+      "best_keyword": 0.676,
       "first_relevant_rank": null,
       "passes_gate": true
     },
@@ -559,7 +604,7 @@
       "style": null,
       "question": "In what year was the company behind Letta founded?",
       "best_similarity": 0.473,
-      "best_keyword": 0.382,
+      "best_keyword": 0.339,
       "first_relevant_rank": null,
       "passes_gate": false
     }
@@ -570,20 +615,21 @@
       "answerable_with_citation": 0.9642857142857143,
       "answerable_cites_relevant_chunk": 0.7857142857142857,
       "unanswerable_admits_not_found": 1.0,
-      "out_of_scope_refused": 0.9166666666666666,
-      "minutes": 1.6
+      "out_of_scope_refused": 1.0,
+      "minutes": 2.2
     },
     "answers": [
       {
         "id": "lora-params",
         "type": "answerable",
-        "answer": "LoRA reduces the number of trainable parameters by freezing the pretrained model weights and injecting only trainable rank decomposition matrices into specific layers of the Transformer architecture [1]. Instead of retraining all parameters, it applies these low-rank updates to a subset of weight matrices (typically $W_q$ and $W_v$ in attention modules) [2]. The total number of trainable parameters is determined by the rank $r$, the model dimension $d_{model}$, and the number of layers or matrices adapted, calculated as $|\\Theta| = 2 \\times \\hat{L}_{LoRA} \\times d_{model} \\times r$ [1]. This approach can reduce the number of trainable parameters by up to 10,000 times compared to full fine-tuning [4].",
+        "answer": "- LoRA freezes the pretrained model weights and injects trainable rank decomposition matrices into each layer of the Transformer architecture [4].\n- It adds trainable pairs of low-rank matrices (A and B) in parallel to existing weight matrices, such as $W_q$ and $W_v$, instead of retraining the full weight matrices [1].\n- The number of trainable parameters is determined by the rank $r$ and the shape of the original weights, calculated as $|\\Theta| = 2 \\times \\hat{L}_{LoRA} \\times d_{model} \\times r$, where $\\hat{L}_{LoRA}$ is the number of weight matrices adapted [1].\n- By limiting adaptation to specific layers (e.g., query and value projections) and freezing others like MLP modules, it significantly reduces the total count of trainable parameters compared to full fine-tuning [2][3].",
         "refused": false,
         "refusal_reason": null,
         "citations": [
+          4,
           1,
           2,
-          4
+          3
         ],
         "cited_relevant": true,
         "admits_not_found": false
@@ -591,12 +637,11 @@
       {
         "id": "dark-knowledge",
         "type": "answerable",
-        "answer": "In knowledge distillation, **dark knowledge** refers to the information contained in a teacher model's full output probability distribution that goes beyond the single correct label [1]. For example, if a teacher classifies an image as \"dog: 0.90, wolf: 0.09, car: 0.0001,\" the student learns not only that it is a dog but also that dogs resemble wolves far more than cars [1]. This concept was formalized by Hinton, Vinyals, and Dean (2015) [1]. To expose this dark knowledge, both the teacher and student distributions are softened using a temperature *T* > 1 in the softmax function during training [1][3].",
+        "answer": "In knowledge distillation, **dark knowledge** refers to the information contained in a teacher model's full output probability distribution that goes beyond the single correct label [1]. For example, if a teacher classifies an image as \"dog: 0.90, wolf: 0.09, car: 0.0001,\" the student learns not only that it is a dog but also that dogs resemble wolves far more than cars [1]. This concept was formalized by Hinton, Vinyals, and Dean (2015) [1]. To expose this dark knowledge, both the teacher and student distributions are softened using a temperature *T* > 1 in the softmax function during training [1].",
         "refused": false,
         "refusal_reason": null,
         "citations": [
-          1,
-          3
+          1
         ],
         "cited_relevant": true,
         "admits_not_found": false
@@ -604,7 +649,7 @@
       {
         "id": "kd-temperature",
         "type": "answerable",
-        "answer": "In knowledge distillation, the temperature $T$ is a parameter used to soften the probability distribution produced by the teacher model's softmax output. Raising the temperature ($T > 1$) spreads the probability across more classes, making small probabilities visible and exposing \"dark knowledge\" regarding how classes relate to each other [2]. This process converts the hard logits of the cumbersome model into a suitably soft set of targets that carry more information than a single correct label [5]. The same high temperature is typically used when training the distilled (student) model to match these softened targets, although the student uses a temperature of 1 after training [1]. Intermediate temperatures are often found to work best when the distilled model is too small to capture all knowledge from the teacher [4].",
+        "answer": "In knowledge distillation, the temperature $T$ is a parameter used to soften the probability distribution produced by the teacher model's softmax output. Raising the temperature ($T > 1$) spreads the probability across more classes, making small probabilities visible and exposing \"dark knowledge\" regarding how classes relate to each other [2]. This process converts the hard class labels into soft target distributions that carry more information than a single correct label [5]. The student model is then trained using these softened targets at the same high temperature, but typically switches back to a temperature of 1 after training is complete [1]. Intermediate temperatures are often found to work best when the distilled model is too small to capture all knowledge from the teacher [4].",
         "refused": false,
         "refusal_reason": null,
         "citations": [
@@ -619,14 +664,14 @@
       {
         "id": "memgpt-context",
         "type": "answerable",
-        "answer": "MemGPT manages its limited context window by implementing a hierarchical memory system inspired by traditional operating systems, which provides an illusion of extended virtual memory through paging between physical memory and disk [1][2]. The system consists of three main components: the LLM's finite context window (acting as physical memory), recall storage for recent data, and archival storage for long-term data [3]. To handle unbounded context, MemGPT uses functions that allow the LLM to manage its own memory without user intervention, moving data between these tiers based on relevance and space constraints [2][4]. Specifically, the main context is split into system instructions (read-only), a working context for key facts, and a FIFO queue for message history [4]. When the context window fills up or receives alerts about limited space, MemGPT evicts less relevant data to external storage and retrieves necessary historical data back into the context via function calls [2][5]. This process includes pagination to prevent retrieval from overflowing the context window and uses a feedback loop where the LLM's outputs are parsed and executed as functions to dynamically adjust memory usage [3][5].",
+        "answer": "MemGPT manages its limited context window by implementing a hierarchical memory system inspired by traditional operating systems, which provides an illusion of extended virtual memory through paging between physical memory and disk [1][2]. The system splits the LLM's main context into three contiguous sections: read-only system instructions, a fixed-size read/write working context for key facts, and a FIFO queue that stores a rolling history of messages [4]. To handle data exceeding this finite window, MemGPT uses function calls to move relevant information from external storage (Recall Storage or Archival Storage) back into the main context when needed, while evicting less relevant data to prevent overflow [2][3]. This process is guided by a feedback loop where the system monitors token limits and issues warnings to the LLM processor to adjust memory management decisions accordingly [5].",
         "refused": false,
         "refusal_reason": null,
         "citations": [
           1,
           2,
-          3,
           4,
+          3,
           5
         ],
         "cited_relevant": true,
@@ -635,7 +680,7 @@
       {
         "id": "dapt",
         "type": "answerable",
-        "answer": "Domain-adaptive pretraining (DAPT) is defined as continuing to pretrain a language model on a large corpus of unlabeled text from a specific target domain [2][4]. This process involves taking an already powerful pre-trained model and adapting it further to the domain of interest, such as biomedical papers, computer science papers, news, or reviews [1][4]. The authors note that this approach is often more cost-effective than training models from scratch in the target domain because it builds upon existing broad-coverage models [3].",
+        "answer": "Domain-adaptive pretraining (DAPT) is defined as continuing to pretrain a language model on a large corpus of unlabeled text specific to a target domain [2][4]. This process involves taking an already powerful pre-trained model and adapting it further to the domain of interest, such as biomedical or computer science publications, before proceeding to task-specific adaptation [1][4]. It is sometimes used interchangeably with task-adaptive pretraining when there is a domain shift between the training and test data distributions for the same task [3].",
         "refused": false,
         "refusal_reason": null,
         "citations": [
@@ -663,7 +708,7 @@
       {
         "id": "indirect-injection",
         "type": "answerable",
-        "answer": "Indirect prompt injections occur when a Large Language Model (LLM) accepts input from external sources, such as websites or files [1]. In this scenario, attackers can hide instructions inside documents, web pages, or emails that the model later reads [2]. These injections can be either intentional (deliberately crafted by malicious actors) or unintentional (triggered by users providing input that causes unexpected behavior) [1][5].",
+        "answer": "Indirect prompt injections occur when a Large Language Model (LLM) accepts input from external sources, such as websites or files [1]. In this scenario, attackers can hide malicious instructions inside documents, web pages, or emails that the model later reads [2]. These injections can be either intentional (deliberately crafted by a malicious actor) or unintentional (triggered by a user providing input that causes unexpected behavior) [1][5].",
         "refused": false,
         "refusal_reason": null,
         "citations": [
@@ -699,13 +744,12 @@
       {
         "id": "catastrophic-forgetting",
         "type": "answerable",
-        "answer": "Catastrophic forgetting occurs when continued pre-training on narrow data degrades a model's general abilities unless general data is mixed in (\"replay\") [1]. This phenomenon can also affect fine-tuning, where updates may degrade safety behavior or cause the model to forget previously learned information [4]. In the context of task adaptation, it refers to the susceptibility of models to forgetting task-relevant corpus knowledge when adapting to new domains or tasks [2].",
+        "answer": "Catastrophic forgetting occurs when continued pre-training on narrow data degrades a model's general abilities unless general data is mixed in (\"replay\") [1]. This phenomenon can also happen during fine-tuning, where updating the model risks degrading safety behavior or losing previously learned knowledge [4].",
         "refused": false,
         "refusal_reason": null,
         "citations": [
           1,
-          4,
-          2
+          4
         ],
         "cited_relevant": true,
         "admits_not_found": false
@@ -713,13 +757,12 @@
       {
         "id": "memory-layers",
         "type": "answerable",
-        "answer": "- **Short-term (working) memory** operates within a single conversation by resending full message history, keeping only the last *N* messages via a sliding window, or periodically compressing older messages into summaries [1].\n- **Long-term memory** spans across conversations and sessions through four steps: writing durable facts extracted after or during interactions, storing them in databases (such as vector stores, key-value/SQL stores, or knowledge graphs), retrieving relevant memories at the start of new sessions to insert into prompts, and updating or forgetting contradicting or stale facts [1].\n- Long-term memory is further categorized by researchers into **episodic** memory (specific past interactions), **semantic** memory (facts about the user or world), and **procedural** memory (learned instructions) [2].\n- MemGPT treats the context window like RAM in an operating system, using function calls to move information between a small \"main context\" and large external storage, paging memories in and out as needed [2][3].",
+        "answer": "- **Short-term (working) memory** operates within a single conversation and includes methods like resending full message history, keeping only the last *N* messages via a sliding window, or periodically compressing older messages into summaries [1].\n- **Long-term memory** spans across conversations and sessions, involving four steps: writing durable facts extracted after or during a conversation, storing them in databases (such as vector stores, key-value/SQL stores, or knowledge graphs), retrieving relevant memories at the start of new interactions, and updating or forgetting contradicting or stale facts [1].\n- Long-term memory can also be conceptualized using **episodic** memory (specific past interactions), **semantic** memory (facts about the user or world), and **procedural** memory (learned instructions) [2].",
         "refused": false,
         "refusal_reason": null,
         "citations": [
           1,
-          2,
-          3
+          2
         ],
         "cited_relevant": true,
         "admits_not_found": false
@@ -739,7 +782,7 @@
       {
         "id": "lost-in-middle",
         "type": "answerable",
-        "answer": "The \"lost in the middle\" problem occurs when information located in the middle of a long prompt is used less reliably by language models compared to information at the start or end [1]. This phenomenon indicates that models do not attend evenly to all parts of long contexts, leading to potential loss of critical details situated away from the beginning or conclusion [1][4].",
+        "answer": "The \"lost in the middle\" problem occurs when information located in the middle of a long prompt is used less reliably by language models compared to information at the start or end [1]. This phenomenon indicates that models attend unevenly to long contexts, leading to potential loss of critical details situated within the center of the input [1][4].",
         "refused": false,
         "refusal_reason": null,
         "citations": [
@@ -752,11 +795,12 @@
       {
         "id": "owasp-injection-mitigation",
         "type": "answerable",
-        "answer": "- Treat the model as any other user by adopting a zero-trust approach and applying proper input validation on responses from the model to backend functions [5].\n- Follow the OWASP ASVS (Application Security Verification Standard) guidelines to ensure effective input validation and sanitization [5].\n- Encode model output back to users to mitigate undesired code execution by JavaScript or Markdown, using context-aware encoding such as HTML encoding for web content or SQL escaping for database queries [5].\n- Use parameterized queries or prepared statements for all database operations involving LLM output [5].\n- Employ strict Content Security Policies (CSP) to mitigate the risk of XSS attacks from LLM-generated content [5].\n- Implement robust logging and monitoring systems to detect unusual patterns in LLM outputs that might indicate exploitation attempts [5].",
+        "answer": "- Treat the model as any other user by adopting a zero-trust approach and applying proper input validation on responses from the model to backend functions [4].\n- Follow OWASP ASVS guidelines to ensure effective input validation and sanitization [4].\n- Encode model output back to users to mitigate undesired code execution, using context-aware encoding (e.g., HTML for web content, SQL escaping for databases) [4].\n- Use parameterized queries or prepared statements for all database operations involving LLM output [4].\n- Employ strict Content Security Policies (CSP) to mitigate the risk of XSS attacks from LLM-generated content [4].\n- Implement robust logging and monitoring systems to detect unusual patterns in LLM outputs that might indicate exploitation attempts [4].\n- Developers can build safeguards into system prompts and input handling, though effective prevention requires ongoing updates to the model's training and safety mechanisms [2].",
         "refused": false,
         "refusal_reason": null,
         "citations": [
-          5
+          4,
+          2
         ],
         "cited_relevant": false,
         "admits_not_found": false
@@ -764,12 +808,13 @@
       {
         "id": "remember-last-week",
         "type": "answerable",
-        "answer": "To remember information from a past conversation like last week, the system uses **long-term memory** which involves four steps: first, extracting durable facts during or after the previous session; second, storing these facts in a database (such as a vector store, key-value store, or knowledge graph); third, retrieving relevant memories at the start of a new conversation using semantic search; and fourth, updating or forgetting stale facts [1]. This process allows the assistant to insert those retrieved facts into the current prompt so the model can answer based on them without changing its internal state [1][2].",
+        "answer": "To remember information from a past conversation like last week's, the system uses **long-term memory** which involves four steps:\n1.  **Write**: The system extracts durable facts (e.g., \"User prefers Python\") during or after the previous conversation [1].\n2.  **Store**: These facts are saved in a database, such as a vector store for semantic recall or a key-value store for structured data [1].\n3.  **Read**: At the start of a new conversation, relevant memories are retrieved (often using semantic search similar to RAG) and inserted into the prompt [1].\n4.  **Update / forget**: Contradicting facts are merged or replaced, while stale ones expire [1].\n\nThis process allows the assistant to retrieve specific details like preferences or past tasks without repeating them, enabling long-running agents that work across many sessions [2][3].",
         "refused": false,
         "refusal_reason": null,
         "citations": [
           1,
-          2
+          2,
+          3
         ],
         "cited_relevant": true,
         "admits_not_found": false
@@ -777,7 +822,7 @@
       {
         "id": "plant-malicious-text",
         "type": "answerable",
-        "answer": "Yes, attackers can plant malicious text in documents that a chatbot reads to trick the system into saving false or malicious \"memory,\" which is then replayed into future conversations [2]. This technique is also described as an indirect prompt injection where hidden text within a web page or document alters the LLM's output [3].",
+        "answer": "Yes, attackers can plant malicious text in documents that a chatbot reads to trick the system into saving false or malicious \"memory,\" which is then replayed into future conversations [2]. Additionally, attackers can modify documents used by Retrieval-Augmented Generation (RAG) applications so that when a user's query returns the altered content, it generates misleading results or alters the LLM's output [3].",
         "refused": false,
         "refusal_reason": null,
         "citations": [
@@ -790,11 +835,12 @@
       {
         "id": "search-vs-retrain",
         "type": "answerable",
-        "answer": "- A company might prefer searching its files because it avoids the high cost of training, which requires thousands of GPUs for weeks or months and very large datasets [3].\n- Searching files allows immediate updates when documents change, whereas training a model to update facts means retraining from scratch or continued pre-training [1][3].\n- Retrieving information from files provides links to exact policy sections, offering source attribution that is absent in models trained without such infrastructure [1][3].\n- Continued pre-training requires deep ML engineering expertise and can suffer from catastrophic forgetting if not mixed with general data [3].",
+        "answer": "- A company might prefer searching its files because it avoids the high cost of training, which requires thousands of GPUs for weeks or months and very large datasets [3].\n- Retrieving information from documents does not require extra retrieval infrastructure at inference time, whereas continued pre-training is a form of teaching the model again that involves significant engineering expertise [2][3].\n- If the company needs to update facts frequently (e.g., changing HR policies), searching files allows immediate updates without retraining, which would otherwise mean training again due to knowledge being frozen at the training cut-off [1][3].",
         "refused": false,
         "refusal_reason": null,
         "citations": [
           3,
+          2,
           1
         ],
         "cited_relevant": false,
@@ -803,13 +849,13 @@
       {
         "id": "big-teaches-small",
         "type": "answerable",
-        "answer": "A big model teaches a smaller one by transferring its generalization ability through \"soft targets\" derived from its output class probabilities, which carry more information than single correct labels [3]. This process involves running the large \"teacher\" model on training inputs to generate full output distributions (e.g., \"dog: 0.90, wolf: 0.09\"), and using these as targets to train a small \"student\" model [4]. To reveal relationships between classes that are not obvious from hard labels, known as \"dark knowledge,\" both the teacher and student distributions are softened by applying a temperature *T* > 1 in the softmax function before training [4]. The student is then trained to minimize a weighted combination of two losses: the KL divergence between the softened teacher and student distributions (scaled by *T²*) and the normal cross-entropy loss with true labels [4]. Alternatively, for very large ensembles, knowledge can be distilled into specialist models that learn to discriminate within highly confusable clusters, often initialized with weights from a generalist model and trained on enriched subsets of data [2].",
+        "answer": "A big model teaches a smaller one by transferring its generalization ability through \"soft targets\" derived from its output class probabilities, which carry more information than single correct labels [3]. This process involves running the large \"teacher\" model on training inputs to generate full output distributions (e.g., \"dog: 0.90, wolf: 0.09\"), and using these as targets to train a small \"student\" model [4]. To reveal relationships between classes that are not obvious from hard labels, known as \"dark knowledge,\" the teacher's logits are softened by applying a temperature *T* > 1 in the softmax function before being used for training [4]. The student is then trained to minimize a weighted combination of two losses: the KL divergence between the softened teacher and student distributions (scaled by *T²*) and the normal cross-entropy loss with true labels [4]. Alternatively, knowledge can be distilled into a single small net from an ensemble or a large highly regularized model, even if the transfer set lacks examples of some classes [1].",
         "refused": false,
         "refusal_reason": null,
         "citations": [
           3,
           4,
-          2
+          1
         ],
         "cited_relevant": true,
         "admits_not_found": false
@@ -817,11 +863,15 @@
       {
         "id": "cheap-adaptation",
         "type": "answerable",
-        "answer": "The provided sources do not contain information about whether it is possible to adapt a huge language model on a single graphics card. They mention that fine-tuning large models like GPT-3 (175B parameters) presents challenges due to the high hardware barrier and memory footprint, but they do not specify if this barrier can be overcome with a single GPU [3].",
+        "answer": "The provided sources do not contain information about whether a specific number of graphics cards is required to adapt a huge language model, nor do they mention the hardware specifications (such as GPU count or memory capacity) needed for this process. They discuss parameter counts and memory footprints in terms of parameters or bytes, but not the physical hardware requirements for training or adaptation [1][2][3][4][5].\n\n\"I don't have enough information in my documents to answer that.\"",
         "refused": false,
         "refusal_reason": null,
         "citations": [
-          3
+          1,
+          2,
+          3,
+          4,
+          5
         ],
         "cited_relevant": false,
         "admits_not_found": true
@@ -829,7 +879,7 @@
       {
         "id": "copy-model-api",
         "type": "answerable",
-        "answer": "No, the provided sources do not contain information about copying a model simply by asking its API lots of questions. The text discusses risks related to generating abuse, faked content, or impersonating others using AI systems [1], but it does not address the specific scenario of cloning a model through high-volume API queries.",
+        "answer": "No, the provided sources do not contain information about copying a model simply by asking its API lots of questions. The text discusses risks related to generating abuse, faked content, or impersonating others using AI systems [1], but it does not address the specific scenario of cloning a model through repeated API queries.",
         "refused": false,
         "refusal_reason": null,
         "citations": [
@@ -841,7 +891,7 @@
       {
         "id": "examples-change-weights",
         "type": "answerable",
-        "answer": "No, showing the model examples in your message does not modify its weights. In-context learning is described as conditioning where the same frozen network produces different outputs based on different inputs [1]. Only the external memory store and the prompt change, while the weights remain frozen [2].",
+        "answer": "No, the weights do not change when you show the model examples in your message. In-context learning involves conditioning on different inputs rather than modifying the frozen network's parameters [1]. Similarly, conversational memory only changes the external memory store and the prompt, leaving the model's weights unchanged [2].",
         "refused": false,
         "refusal_reason": null,
         "citations": [
@@ -854,7 +904,7 @@
       {
         "id": "confident-wrong-answers",
         "type": "answerable",
-        "answer": "Language models sometimes state false things with confidence due to hallucinations, which occur when the model fills gaps in its training data using statistical patterns without truly understanding the content, resulting in answers that sound correct but are unfounded [2]. This can also be caused by biases introduced by training data or incomplete information [2]. Overreliance exacerbates the issue when users place excessive trust in LLM-generated content without verifying its accuracy [2].\n\nTo help mitigate these issues, techniques such as prompting and in-context learning (e.g., Chain-of-Thought Prompting) are used to elicit reasoning in large language models [3]. Additionally, retrieval-augmented generation (RAG) approaches involve retrieving evidence from external sources like Wikipedia before classifying claims, which helps reduce reliance on internal training data patterns [1].",
+        "answer": "Language models sometimes state false things with confidence due to hallucination, which occurs when the model fills gaps in its training data using statistical patterns without truly understanding the content, resulting in answers that sound correct but are unfounded [2]. This can also be caused by biases introduced by training data or incomplete information [2]. Overreliance exacerbates the issue when users place excessive trust in LLM-generated content without verifying its accuracy [2].\n\nTo help mitigate these issues, techniques such as prompting and in-context learning (e.g., Chain-of-Thought Prompting) can elicit reasoning in large language models [3]. Additionally, retrieval-augmented generation (RAG) involves retrieving evidence from external sources like Wikipedia to support claims before classifying them, which helps handle classification tasks rather than just generation [1].",
         "refused": false,
         "refusal_reason": null,
         "citations": [
@@ -868,11 +918,10 @@
       {
         "id": "qlora",
         "type": "answerable",
-        "answer": "QLoRA is an efficient fine-tuning method for quantized Large Language Models (LLMs) that leaves the original model weights frozen while adding new trainable parameters [2][3]. Unlike full fine-tuning, which modifies all parameters, QLoRA does not alter the original weights but instead introduces additional parameters whose effects are combined with the original weights to change the model's behavior permanently [1].",
+        "answer": "QLoRA is a method for the efficient fine-tuning of quantized Large Language Models (LLMs) [3]. It operates similarly to LoRA by leaving the original model weights frozen while adding new trainable parameters, which are then combined with the original weights to change the model's behavior permanently [1].",
         "refused": false,
         "refusal_reason": null,
         "citations": [
-          2,
           3,
           1
         ],
@@ -894,7 +943,7 @@
       {
         "id": "poisonedrag",
         "type": "answerable",
-        "answer": "PoisonedRAG refers to knowledge corruption attacks on Retrieval-Augmented Generation (RAG) systems where an attacker injects crafted texts into a knowledge base to manipulate the system's responses. Research by Zou et al. (2024) demonstrated that injecting just five such texts per target question into a large knowledge base could cause the system to provide an attacker-chosen answer approximately 90% of the time [2].",
+        "answer": "PoisonedRAG refers to knowledge corruption attacks on Retrieval-Augmented Generation (RAG) systems where an attacker injects crafted texts into a knowledge base to manipulate the system's responses. Research by Zou et al. (2024) demonstrated that injecting just five such texts per target question into a large knowledge base could cause the system to provide attacker-chosen answers approximately 90% of the time [2].",
         "refused": false,
         "refusal_reason": null,
         "citations": [
@@ -931,7 +980,7 @@
       {
         "id": "letta",
         "type": "answerable",
-        "answer": "Letta is the open-source continuation of MemGPT [1].",
+        "answer": "Letta is an open-source continuation of MemGPT [1].",
         "refused": false,
         "refusal_reason": null,
         "citations": [
@@ -943,12 +992,10 @@
       {
         "id": "oos-australia",
         "type": "out_of_scope",
-        "answer": "The provided documents do not contain information about the capital of Australia [1].",
-        "refused": false,
-        "refusal_reason": null,
-        "citations": [
-          1
-        ],
+        "answer": "I don't have enough information in my documents to answer that.",
+        "refused": true,
+        "refusal_reason": "low_similarity",
+        "citations": [],
         "cited_relevant": null,
         "admits_not_found": true
       },
@@ -1078,7 +1125,7 @@
       {
         "id": "un-openai-cost",
         "type": "unanswerable",
-        "answer": "The provided sources do not contain specific information on the cost of fine-tuning a model using the OpenAI API, other than mentioning that adversarial examples can be generated at a cost under US$0.20 through an API [4]. The source lists \"OpenAI fine-tuning API\" as a managed service option but does not provide pricing details for standard fine-tuning tasks [1].",
+        "answer": "The provided sources do not contain specific cost information for fine-tuning a model with the OpenAI API, other than mentioning that using adversarial examples to remove safety guardrails from GPT-3.5 Turbo costs under US$0.20 [4]. The source lists the OpenAI fine-tuning API as a managed service option but does not provide general pricing details [1].",
         "refused": false,
         "refusal_reason": null,
         "citations": [
@@ -1101,11 +1148,12 @@
       {
         "id": "un-chatgpt-memory-db",
         "type": "unanswerable",
-        "answer": "The provided sources do not specify which vector database ChatGPT's memory feature uses internally. They mention that various storage options like Redis, PostgreSQL/pgvector, SQLite, and any vector database are available for implementing memory systems in general [1], but they do not disclose the specific technology used by ChatGPT.",
+        "answer": "The provided sources do not specify which vector database ChatGPT's memory feature uses internally. They mention that various storage options (such as Redis, PostgreSQL/pgvector, SQLite, or any vector database) are available for implementing memory systems in general [1], and note that memories are stored in databases like vector stores for semantic recall [4], but they do not disclose the specific technology used by ChatGPT.\n\nI don't have enough information in my documents to answer that.",
         "refused": false,
         "refusal_reason": null,
         "citations": [
-          1
+          1,
+          4
         ],
         "cited_relevant": null,
         "admits_not_found": true

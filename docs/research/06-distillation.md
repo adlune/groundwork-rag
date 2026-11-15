@@ -74,8 +74,7 @@ model). The teacher's parameters are not modified.
   GKDTrainer (generalized knowledge distillation) and SFTTrainer for black-box
   distillation.
 - PyTorch for custom KD losses; torchtune knowledge-distillation recipes.
-- NVIDIA NeMo and TensorRT Model Optimizer (pruning + distillation, as used for the
-  Minitron model family).
+- NVIDIA NeMo (pruning + distillation, as used for the Minitron model family).
 - Synthetic data generation: any large LLM API or vLLM, plus tools like distilabel.
 - Managed: some providers offer model distillation workflows built on stored outputs
   from their large models.
@@ -94,8 +93,8 @@ milliseconds per message, and costs almost nothing to operate.
 Distillation is the legitimate twin of **model extraction (model stealing)**. An attacker
 queries a victim's API many times and trains a copy on the responses. Tramèr et al. (2016)
 demonstrated extraction of ML models from prediction APIs, and Carlini et al. (2024)
-extracted the exact embedding-projection layer of production OpenAI language models for
-under US$20 of queries. Defences include rate limiting, query monitoring, returning fewer
+recovered the entire projection matrix (the final layer) of OpenAI's Ada and Babbage
+language models for under US$20 of queries. Defences include rate limiting, query monitoring, returning fewer
 details (no full probability vectors) and output watermarking. Students also inherit any
 backdoors or unsafe behaviours present in the teacher's outputs, so teacher outputs should
 be filtered before training.

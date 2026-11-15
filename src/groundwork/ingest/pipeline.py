@@ -25,7 +25,7 @@ def load_corpus(sources: list[Source] | None = None) -> list[Section]:
 
 def build_chunks(settings: Settings | None = None) -> list[Chunk]:
     settings = settings or get_settings()
-    length = get_token_counter(settings.embedding_model)
+    length = get_token_counter(settings.embedding_model, settings.embedding_revision)
     chunks = chunk_sections(load_corpus(), length, settings.chunk_size, settings.chunk_overlap)
     # Quality filters for papers (PDFs): drop bibliographies, flattened result tables and
     # garbled text. The Markdown notes keep their short reference sections, which name

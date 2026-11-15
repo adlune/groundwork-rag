@@ -19,11 +19,13 @@ patterns and world knowledge into its weights. For scale: GPT-3 was trained on r
 Real probabilities measured from a small open model (qwen3.5:4b). Even for a simple fact, the model spreads probability over many possible continuations, and training pushes the right one up.
 
 **Continued pre-training** (also called domain-adaptive pre-training) takes an
-already pre-trained model and keeps running the same next-token objective on a new,
-usually domain-specific corpus: medical papers, legal contracts, source code, or a
-company's internal documents. Gururangan et al. (2020) showed that a second phase of
-pre-training on in-domain text consistently improves performance on tasks from that
-domain. Code Llama, for example, was created by continuing to pre-train Llama 2 on a large
+already pre-trained model and keeps training it with its original self-supervised objective
+on a new, usually domain-specific corpus: medical papers, legal contracts, source code, or a
+company's internal documents. For a GPT-style model that objective is next-token
+prediction. For an encoder like RoBERTa it is masked-token prediction (hide random words and
+predict them from both sides). Gururangan et al. (2020) used RoBERTa and showed that a
+second phase of masked-token pre-training on in-domain text consistently improves
+performance on tasks from that domain. Code Llama, for example, was created by continuing to pre-train Llama 2 on a large
 code corpus.
 
 ## How is the knowledge incorporated?
@@ -92,6 +94,7 @@ and later leak sensitive training data, so data provenance and deduplication mat
 
 - Brown et al. (2020). *Language Models are Few-Shot Learners.* arXiv:2005.14165.
 - Gururangan et al. (2020). *Don't Stop Pretraining: Adapt Language Models to Domains and Tasks.* arXiv:2004.10964.
+- Meta (2024). *Introducing Meta Llama 3: The most capable openly available LLM to date.* ai.meta.com/blog/meta-llama-3, 18 April 2024.
 - Rozière et al. (2023). *Code Llama: Open Foundation Models for Code.* arXiv:2308.12950.
 - Wu et al. (2023). *BloombergGPT: A Large Language Model for Finance.* arXiv:2303.17564.
 - Carlini et al. (2023). *Poisoning Web-Scale Training Datasets is Practical.* arXiv:2302.10149.

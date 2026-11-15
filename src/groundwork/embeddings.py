@@ -24,9 +24,10 @@ class Embedder(Protocol):
 
 
 class SentenceTransformerEmbedder:
-    def __init__(self, model_name: str, query_instruction: str = ""):
+    def __init__(self, model_name: str, query_instruction: str = "", revision: str | None = None):
         self.name = model_name
         self.query_instruction = query_instruction
+        self.revision = revision
         self._model = None
 
     @property
@@ -39,9 +40,9 @@ class SentenceTransformerEmbedder:
                 # Use the copy already on disk without asking Hugging Face for updates:
                 # ~0.4 s instead of 20-40 s of network checks, and it works offline
                 # (handy for a live demo on unreliable Wi-Fi).
-                self._model = SentenceTransformer(self.name, local_files_only=True)
+                self._model = SentenceTransformer(self.name, revision=self.revision, local_files_only=True)
             except OSError:  # not on disk yet: first run, download it
-                self._model = SentenceTransformer(self.name)
+                self._model = SentenceTransformer(self.name, revision=self.revision)
         return self._model
 
     def embed_documents(self, texts: list[str]) -> np.ndarray:
@@ -61,10 +62,10 @@ class SentenceTransformerEmbedder:
 
 
 @lru_cache
-def _cached(model_name: str, query_instruction: str) -> SentenceTransformerEmbedder:
-    return SentenceTransformerEmbedder(model_name, query_instruction)
+def _cached(model_name: str, query_instruction: str, revision: str) -> SentenceTransformerEmbedder:
+    return SentenceTransformerEmbedder(model_name, query_instruction, revision)
 
 
 def get_embedder(settings: Settings | None = None) -> SentenceTransformerEmbedder:
     settings = settings or get_settings()
-    return _cached(settings.embedding_model, settings.query_instruction)
+    return _cached(settings.embedding_model, settings.query_instruction, settings.embedding_revision)

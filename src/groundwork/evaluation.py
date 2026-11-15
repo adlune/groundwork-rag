@@ -9,8 +9,14 @@ Two separate questions get two separate measurements:
 2. The gate (answerable vs out-of-scope questions): does the app answer the questions
    it should and refuse the ones it should? Every threshold value gives a number of
    false refusals (answerable but refused) and false accepts (off-topic but answered).
+
+Thresholds chosen on a set of questions look better on that set than they will on new
+questions. split_half_cv estimates the difference: calibrate on a random half, measure on
+the other half, repeat.
 """
 
+import math
+import random
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -146,6 +152,98 @@ def best_interval_midpoint(values: list[float], errors: list[int]) -> tuple[floa
             start = None
     lo, hi = best[0], best[1] - 1
     return round((values[lo] + values[hi]) / 2, 3), fewest
+
+
+def frange(lo: float, hi: float, step: float) -> list[float]:
+    return [round(lo + i * step, 3) for i in range(round((hi - lo) / step) + 1)]
+
+
+SIMILARITY_GRID = frange(0.40, 0.80, 0.005)
+KEYWORD_GRID = frange(0.30, 1.00, 0.01)
+
+# One point per question for the gate: (best similarity, best keyword score, type).
+# A question passes the gate if any hit passes, which is the same as its best
+# similarity or its best keyword score passing.
+GatePoint = tuple[float, float, str]
+
+
+def gate_points(runs: list[Run]) -> list[GatePoint]:
+    return [(r.best_dense, r.best_keyword, r.question.type) for r in runs if r.question.type != "unanswerable"]
+
+
+def point_errors(points: list[GatePoint], tau: float, beta: float) -> tuple[int, int]:
+    """(false refusals, false accepts) for a similarity threshold tau and keyword threshold beta."""
+    fr = sum(1 for d, k, t in points if t == "answerable" and not (d >= tau or k >= beta))
+    fa = sum(1 for d, k, t in points if t == "out_of_scope" and (d >= tau or k >= beta))
+    return fr, fa
+
+
+def calibrate_gate(points: list[GatePoint]) -> tuple[float, float, int]:
+    """Both thresholds together: the centre of the region of the grid with the fewest errors.
+
+    Tuning the similarity threshold first and the keyword one second (the earlier method)
+    can lock in a similarity value that only made sense without the keyword check.
+    Searching both at once and taking the centre of the best region leaves a margin in
+    both directions.
+    """
+    grid = [(sum(point_errors(points, t, b)), t, b) for t in SIMILARITY_GRID for b in KEYWORD_GRID]
+    fewest = min(e for e, _, _ in grid)
+    region = [(t, b) for e, t, b in grid if e == fewest]
+    tau = round(sum(t for t, _ in region) / len(region), 3)
+    beta = round(sum(b for _, b in region) / len(region), 2)
+    return tau, beta, fewest
+
+
+def split_half_cv(points: list[GatePoint], splits: int = 300, seed: int = 0) -> dict:
+    """Calibrate on a random half, count errors on the other half, many times over.
+
+    Returns the average held-out false refusal and false accept rates and the spread of
+    the chosen thresholds, which shows how much they depend on the exact questions.
+    """
+    rng = random.Random(seed)
+    points = list(points)
+    fr_rates, fa_rates, taus, betas = [], [], [], []
+    for _ in range(splits):
+        rng.shuffle(points)
+        train, test = points[: len(points) // 2], points[len(points) // 2 :]
+        n_ans = sum(t == "answerable" for _, _, t in test)
+        n_oos = sum(t == "out_of_scope" for _, _, t in test)
+        if not n_ans or not n_oos or len({t for _, _, t in train}) < 2:
+            continue
+        tau, beta, _ = calibrate_gate(train)
+        fr, fa = point_errors(test, tau, beta)
+        fr_rates.append(fr / n_ans)
+        fa_rates.append(fa / n_oos)
+        taus.append(tau)
+        betas.append(beta)
+
+    def spread(values: list[float]) -> list[float]:
+        v = sorted(values)
+        return [v[int(0.05 * (len(v) - 1))], v[len(v) // 2], v[int(0.95 * (len(v) - 1))]]
+
+    return {
+        "splits": len(fr_rates),
+        "heldout_false_refusal_rate": round(sum(fr_rates) / len(fr_rates), 3),
+        "heldout_false_accept_rate": round(sum(fa_rates) / len(fa_rates), 3),
+        "min_similarity_5_50_95": spread(taus),
+        "min_keyword_5_50_95": spread(betas),
+    }
+
+
+def random_hit_at_k(chunks: list[Chunk], questions: list[EvalQuestion], k: int) -> float:
+    """Expected hit@k of a retriever that picks k chunks at random.
+
+    For a question with r relevant chunks out of n, the chance that none of k random
+    picks is relevant is C(n-r, k) / C(n, k). If many chunks count as relevant, even a
+    random retriever scores well, so this is the floor a real retriever must beat.
+    """
+    n = len(chunks)
+    answerable = [q for q in questions if q.type == "answerable"]
+    total = 0.0
+    for q in answerable:
+        r = sum(is_relevant(c, q) for c in chunks)
+        total += 1 - math.comb(n - r, k) / math.comb(n, k)
+    return total / len(answerable)
 
 
 NOT_FOUND = re.compile(
